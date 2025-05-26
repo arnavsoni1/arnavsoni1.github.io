@@ -4,149 +4,144 @@ body {
   background: #fafafa;
   color: #222;
 }
+
 header {
   background: #cc0000;
   color: #fff;
-  padding: 16px 0;
+  padding: 20px 0 10px 0;
   text-align: center;
+}
+
+.logo {
   font-size: 2rem;
   font-weight: bold;
-  letter-spacing: 1px;
+  margin-bottom: 8px;
 }
+
 nav {
-  background: #fff;
-  border-bottom: 1px solid #eee;
-  display: flex;
-  justify-content: center;
-  gap: 24px;
-  padding: 12px 0;
+  margin-top: 10px;
+}
+
+nav a {
+  color: #fff;
+  text-decoration: none;
+  margin: 0 15px;
   font-size: 1rem;
   font-weight: 500;
-}
-nav a {
-  color: #cc0000;
-  text-decoration: none;
-  padding: 4px 8px;
+  padding: 6px 12px;
   border-radius: 4px;
   transition: background 0.2s;
 }
+
 nav a:hover {
-  background: #f8d7da;
+  background: #fff;
+  color: #cc0000;
 }
-a {
-  color: #ffffff
-  font-size: 2px;
-} 
+
 .hero {
   background: #fff;
-  padding: 32px 16px 24px 16px;
+  padding: 40px 20px 30px 20px;
   text-align: center;
   border-bottom: 1px solid #eee;
 }
-.hero h2 {
-  font-size: 2rem;
-  margin-bottom: 8px;
-}
-.hero .deals {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 24px;
-  margin: 24px 0 0 0;
-}
-.deal-card {
-  background: #f5f5f5;
-  border-radius: 8px;
-  padding: 16px 24px;
-  min-width: 180px;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.03);
-  text-align: center;
-}
-.deal-card .percent {
+
+.hero h1 {
   color: #cc0000;
-  font-size: 1.5rem;
-  font-weight: bold;
+  font-size: 2.2rem;
+  margin-bottom: 12px;
 }
-.deal-card .desc {
-  margin-top: 8px;
-  font-size: 1rem;
+
+.hero p {
+  font-size: 1.1rem;
+  color: #444;
 }
-.section {
-  padding: 32px 16px;
-  max-width: 1200px;
-  margin: 0 auto;
-}
-.section-title {
-  font-size: 1.4rem;
-  color: #cc0000;
-  font-weight: bold;
-  margin-bottom: 16px;
-}
-.products {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 24px;
-  justify-content: flex-start;
-}
-.product {
+
+.categories {
+  max-width: 900px;
+  margin: 40px auto;
   background: #fff;
   border-radius: 8px;
+  padding: 32px 20px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.04);
-  padding: 16px;
-  width: 220px;
-  min-height: 180px;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
 }
-.product .name {
-  font-weight: 500;
-  margin-bottom: 8px;
-}
-.product .price {
+
+.categories h2 {
   color: #cc0000;
-  font-weight: bold;
-  margin-bottom: 4px;
+  font-size: 1.5rem;
+  margin-bottom: 18px;
+  text-align: center;
 }
-.product .old-price {
-  text-decoration: line-through;
-  color: #888;
-  font-size: 0.9em;
-  margin-left: 6px;
-}
-.categories {
+
+.categories ul {
+  list-style: none;
+  padding: 0;
   display: flex;
   flex-wrap: wrap;
   gap: 16px;
-  margin-top: 16px;
+  justify-content: center;
 }
-.category {
-  background: #fff;
-  padding: 12px 20px;
-  border-radius: 6px;
+
+.categories li {
+  background: #f8f8f8;
   color: #cc0000;
   font-weight: 500;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.03);
-  cursor: pointer;
+  padding: 12px 22px;
+  border-radius: 6px;
+  margin-bottom: 10px;
+  font-size: 1rem;
   transition: background 0.2s;
 }
-.category:hover {
-  background: #f3cdc4;
+
+.categories li:hover {
+  background: #f8d7da;
 }
+
 footer {
   background: #cc0000;
   color: #fff;
-  text-align: center;
-  padding: 18px 0;
-  margin-top: 32px;
+  padding: 24px 0 12px 0;
   font-size: 1rem;
 }
-@media (max-width: 800px) {
-  .products, .hero .deals {
+
+.footer-main {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 48px;
+  max-width: 900px;
+  margin: 0 auto 12px auto;
+}
+
+.footer-contact,
+.footer-social {
+  min-width: 220px;
+  margin-bottom: 12px;
+}
+
+.footer-contact a,
+.footer-social a {
+  color: #fff;
+  text-decoration: underline;
+  margin-right: 8px;
+  transition: color 0.2s;
+}
+
+.footer-contact a:hover,
+.footer-social a:hover {
+  color: #f8d7da;
+}
+
+.footer-note {
+  text-align: center;
+  margin-top: 16px;
+  font-size: 1rem;
+  color: #fff;
+}
+
+@media (max-width: 700px) {
+  .footer-main {
     flex-direction: column;
     align-items: center;
-  }
-  .product, .deal-card {
-    width: 90%;
+    gap: 18px;
   }
 }
