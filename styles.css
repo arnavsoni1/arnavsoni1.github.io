@@ -8,24 +8,24 @@ body {
 header {
   background: #cc0000;
   color: #fff;
-  padding: 20px 0 10px 0;
+  padding: 18px 0 12px 0;
   text-align: center;
 }
 
 .logo {
-  font-size: 2rem;
+  font-size: 2.2rem;
   font-weight: bold;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
 }
 
 nav {
-  margin-top: 10px;
+  margin: 10px 0;
 }
 
 nav a {
   color: #fff;
   text-decoration: none;
-  margin: 0 15px;
+  margin: 0 12px;
   font-size: 1rem;
   font-weight: 500;
   padding: 6px 12px;
@@ -36,6 +36,37 @@ nav a {
 nav a:hover {
   background: #fff;
   color: #cc0000;
+}
+
+.search-bar {
+  margin: 16px auto 0 auto;
+  max-width: 400px;
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+}
+
+.search-bar input[type="text"] {
+  padding: 7px 12px;
+  border-radius: 4px;
+  border: none;
+  width: 70%;
+  font-size: 1rem;
+}
+
+.search-bar button {
+  padding: 7px 18px;
+  border-radius: 4px;
+  border: none;
+  background: #fff;
+  color: #cc0000;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.2s;
+}
+
+.search-bar button:hover {
+  background: #f8d7da;
 }
 
 .hero {
@@ -56,8 +87,36 @@ nav a:hover {
   color: #444;
 }
 
+.hero-deals {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 22px;
+  margin-top: 30px;
+}
+
+.deal-card {
+  background: #f5f5f5;
+  border-radius: 8px;
+  padding: 16px 24px;
+  min-width: 160px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.03);
+  text-align: center;
+}
+
+.deal-title {
+  color: #cc0000;
+  font-size: 1.3rem;
+  font-weight: bold;
+}
+
+.deal-desc {
+  margin-top: 8px;
+  font-size: 1rem;
+}
+
 .categories {
-  max-width: 900px;
+  max-width: 1100px;
   margin: 40px auto;
   background: #fff;
   border-radius: 8px;
@@ -90,10 +149,65 @@ nav a:hover {
   margin-bottom: 10px;
   font-size: 1rem;
   transition: background 0.2s;
+  cursor: pointer;
 }
 
 .categories li:hover {
   background: #f8d7da;
+}
+
+.products {
+  max-width: 1100px;
+  margin: 40px auto;
+  background: #fff;
+  border-radius: 8px;
+  padding: 32px 20px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+}
+
+.products h2 {
+  color: #cc0000;
+  font-size: 1.5rem;
+  margin-bottom: 18px;
+  text-align: center;
+}
+
+.product-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  justify-content: center;
+}
+
+.product-card {
+  background: #f5f5f5;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+  padding: 18px 16px;
+  width: 220px;
+  min-height: 120px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
+.product-name {
+  font-weight: 500;
+  margin-bottom: 10px;
+}
+
+.product-price {
+  color: #cc0000;
+  font-weight: bold;
+  font-size: 1.1rem;
+}
+
+.old-price {
+  text-decoration: line-through;
+  color: #888;
+  font-size: 0.95em;
+  margin-left: 6px;
 }
 
 footer {
@@ -138,7 +252,14 @@ footer {
   color: #fff;
 }
 
-@media (max-width: 700px) {
+@media (max-width: 900px) {
+  .categories ul, .product-grid {
+    flex-direction: column;
+    align-items: center;
+  }
+  .product-card {
+    width: 90%;
+  }
   .footer-main {
     flex-direction: column;
     align-items: center;
