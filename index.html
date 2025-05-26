@@ -100,6 +100,26 @@
       font-weight: 500;
       margin-bottom: 8px;
     }
+    
+    .logo {
+      font-size: 1.8em;
+      font-weight: bold;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 30px; /* Adjust spacing between links as needed */
+    }
+
+    .nav-links a {
+      color: white;
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    .nav-links a:hover {
+      text-decoration: underline;
+    }
     .product .price {
       color: #cc0000;
       font-weight: bold;
@@ -151,14 +171,15 @@
 </head>
 <body>
   <header>
-    Target
-    <nav>
-    <a href="#" style="margin: 0 15px; color: white; text-decoration: none; font-weight: bold;">Categories</a>
-    <a href="#" style="margin: 0 15px; color: white; text-decoration: none; font-weight: bold;">Pickup and delivery</a>
-    <a href="#" style="margin: 0 15px; color: white; text-decoration: none; font-weight: bold;">Weekly Ads</a>
-    <a href="#" style="margin: 0 15px; color: white; text-decoration: none; font-weight: bold;">Find Store</a>  
-    </nav>  
-  </header>
+  <div class="logo">Target</div>
+  <nav class="nav-links">
+    <a href="#">Categories</a>
+    <a href="#">Pickup & Delivery</a>
+    <a href="#">Weekly Ads</a>
+    <a href="#">Find Stores</a>
+  </nav>
+</header>
+
   <nav>
     <a href="#" style="color: #cc0000; text-decoration: none; padding: 4px 8px; border-radius: 4px; transition: background 0.2s;">Women’s</a>
     <a href="#" style="color: #cc0000; text-decoration: none; padding: 4px 8px; border-radius: 4px; transition: background 0.2s;">Men’s</a>
