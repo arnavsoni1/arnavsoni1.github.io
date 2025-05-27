@@ -155,13 +155,55 @@ body {
       background: #f8d7da;
     }
     footer {
-      background: #cc0000;
-      color: #fff;
-      text-align: center;
-      padding: 18px 0;
-      margin-top: 32px;
-      font-size: 1rem;
-    }
+  background: #cc0000;
+  color: #fff;
+  padding: 24px 0 12px 0;
+  font-size: 1rem;
+}
+
+.footer-main {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 48px;
+  max-width: 900px;
+  margin: 0 auto 12px auto;
+}
+
+
+.footer-social {
+  min-width: 220px;
+  margin-bottom: 12px;
+}
+
+
+.footer-social a {
+  color: #fff;
+  text-decoration: underline;
+  margin-right: 8px;
+  transition: color 0.2s;
+}
+
+
+.footer-social a:hover {
+  color: #f8d7da;
+}
+
+.footer-note {
+  text-align: center;
+  margin-top: 16px;
+  font-size: 1rem;
+  color: #fff;
+}
+
+@media (max-width: 700px) {
+  .footer-main {
+    flex-direction: column;
+    align-items: center;
+    gap: 18px;
+  }
+}
+
     @media (max-width: 800px) {
       .products, .hero .deals {
         flex-direction: column;
