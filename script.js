@@ -1,16 +1,13 @@
-const screen = document.getElementById("screen");
-const buttons = document.querySelectorAll("button");
+function clear() {
+  document.getElementById("screen").innerText = "";
+}
 
-buttons.forEach((button) => {
-  button.addEventListener("click", (e) => {
-    const clickedButton = e.target.closest("button");
-    const value = clickedButton.innerText;
-    if (value === "Clear") {
-      screen.innerText = "";
-    } else if (value === "=") {
-        screen.innerText = eval(screen.innerText);
-    } else {
-      screen.innerText += value;
-    }
-  });
-});
+function calculate() {
+  const screen = document.getElementById("screen");
+  screen.innerText = eval(screen.innerText);
+}
+
+function append(value) {
+  const screen = document.getElementById("screen");
+  screen.innerText += value;
+}
