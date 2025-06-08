@@ -5,7 +5,7 @@ function append(a) {
 }
 
 function clear() {
-  exp.value = " ";
+  exp.value = "";
 }
 
 function calculate() {
