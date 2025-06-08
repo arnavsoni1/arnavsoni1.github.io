@@ -1,13 +1,16 @@
-let exp = document.getElementById("display");
+const screen = document.getElementById("screen");
+const buttons = document.querySelectorAll("button");
 
-function append(a) {
-  exp.value += a;
-}
-
-function clear() {
-  exp.value = "";
-}
-
-function evaluate() {
-    exp.value = eval(exp.value);
-}
+buttons.forEach((button) => {
+  button.addEventListener("click", (e) => {
+    const clickedButton = e.target.closest("button");
+    const value = clickedButton.innerText;
+    if (value === "Clear") {
+      screen.innerText = "";
+    } else if (value === "=") {
+        screen.innerText = eval(screen.innerText);
+    } else {
+      screen.innerText += value;
+    }
+  });
+});
