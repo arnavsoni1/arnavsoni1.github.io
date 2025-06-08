@@ -8,6 +8,6 @@ function clear() {
   exp.value = "";
 }
 
-function calculate() {
+function evaluate() {
     exp.value = eval(exp.value);
 }
