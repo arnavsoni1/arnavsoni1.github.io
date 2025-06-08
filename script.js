@@ -1,13 +1,14 @@
+let exp = document.getElementById("display");
+
+function append(a) {
+  exp.value += a;
+}
+
 function clear() {
-  document.getElementById("screen").innerText = "";
+  exp.innerText = " ";
 }
 
-function calculate() {
-  const screen = document.getElementById("screen");
-  screen.innerText = eval(screen.innerText);
-}
-
-function append(value) {
-  const screen = document.getElementById("screen");
-  screen.innerText += value;
+function evaluate() {
+    let result = eval(exp.value);
+    exp.value = result;
 }
