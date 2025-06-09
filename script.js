@@ -1,14 +1,17 @@
-let exp = document.getElementById("display");
+const screen = document.getElementById("screen");
+const buttons = document.querySelectorAll("button");
 
-function append(a) {
-  exp.value += a;
-}
+buttons.forEach((button) => {
+  button.addEventListener("click", (e) => {
+    const clickedButton = e.target.closest("button");
+    const value = clickedButton.innerText;
 
-function clear() {
-  exp.innerText = " ";
-}
-
-function evaluate() {
-    let result = eval(exp.value);
-    exp.value = result;
-}
+    if (value === "Clear") {
+      screen.innerText = "";
+    } else if (value === "=") {
+        screen.innerText = eval(screen.innerText);
+    } else {
+      screen.innerText += value;
+    }
+  });
+});
