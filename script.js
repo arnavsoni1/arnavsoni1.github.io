@@ -1,17 +1,19 @@
-const screen = document.getElementById("screen");
-const buttons = document.querySelectorAll("button");
+const display = document.getElementById('display');
 
-buttons.forEach((button) => {
-  button.addEventListener("click", (e) => {
-    const clickedButton = e.target.closest("button");
-    const value = clickedButton.innerText;
+function append(value) {
+  display.value += value;
+}
+ 
+function clearDisplay() {
+  display.value = '';
+}
 
-    if (value === "Clear") {
-      screen.innerText = "";
-    } else if (value === "=") {
-        screen.innerText = eval(screen.innerText);
-    } else {
-      screen.innerText += value;
-    }
-  });
-});
+function calculate() {
+  try {
+      let expression = display.value.replace(/÷/g, '/').replace(/×/g, '*').replace(/−/g, '-');
+      display.value = eval(expression);
+  }
+  catch {
+        display.value = 'Error';
+  }
+}
