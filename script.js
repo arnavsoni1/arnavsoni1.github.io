@@ -1,18 +1,15 @@
-const display = document.getElementById('display');
+const exp = document.getElementById("display");
 
-function append(value) {
-  display.value += value;
+function append(a) {
+  exp.value += a;
 }
 
-function clearDisplay() {
-  display.value = '';
+function clear() {
+  exp.innerText = " ";
 }
 
-function calculate() {
-  try {
-    let expression = display.value.replace(/÷/g, '/').replace(/×/g, '*').replace(/−/g, '-');
-    display.value = eval(expression);
-  } catch {
-    display.value = 'Error';
-  }
+function evaluate() {
+    let result = eval(exp.value);
+    exp.value = result;
 }
+
