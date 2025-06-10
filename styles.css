@@ -21,7 +21,7 @@ body {
 .buttons {
   display: grid;
   grid-template-columns: repeat(4, 60px);
-  gap: 10px;
+  gap: 20px;
 }
 button {
   font-size: 1.2em;
