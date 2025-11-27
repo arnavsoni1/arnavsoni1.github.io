@@ -1,0 +1,58 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600&display=swap');
+
+:root {
+    --star-wars-yellow: #FFE81F;
+    --lightsaber-blue: #00D4FF;
+    --lightsaber-green: #00FF41;
+    --lightsaber-red: #FF0000;
+    --dark-space: #0a0a0a;
+    --empire-gray: #1a1a2e;
+    --text-light: #e0e0e0;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Exo 2', sans-serif;
+    background: var(--dark-space);
+    color: var(--text-light);
+    overflow-x: hidden;
+    min-height: 100vh;
+    line-height: 1.6;
+}
+
+#app {
+    min-height: 100vh;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--dark-space);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--lightsaber-blue);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--star-wars-yellow);
+}
+
+/* Selection */
+::selection {
+    background: var(--star-wars-yellow);
+    color: var(--dark-space);
+}
