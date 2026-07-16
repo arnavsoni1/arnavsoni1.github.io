@@ -1,81 +1,69 @@
 <script>
     import SkillCard from './SkillCard.svelte';
-    
-    // Import skill icons
     import cIcon from '../../assets/C.png';
     import cppIcon from '../../assets/C++.png';
     import rustIcon from '../../assets/rust.png';
     import cudaIcon from '../../assets/cuda.png';
     import pythonIcon from '../../assets/python.png';
 
+    // Edit this array to update the technologies shown on the portfolio.
     const skills = [
-        { 
-            icon: cIcon, 
-            name: 'C', 
-            description: 'Not much to say', 
-            level: 65 
-        },
-        { 
-            icon: cppIcon, 
-            name: 'C++', 
-            description: 'C, but better', 
-            level: 75 
-        },
-        { 
-            icon: rustIcon, 
-            name: 'Rust', 
-            description: 'Memory Safety', 
-            level: 50 
-        },
-        { 
-            icon: cudaIcon, 
-            name: 'CUDA', 
-            description: 'GPU Computing', 
-            level: 60 
-        },
-        { 
-            icon: pythonIcon, 
-            name: 'Python', 
-            description: 'Non-negotiable in the modern world', 
-            level: 80 
-        },
+        { icon: cIcon, name: 'C', description: 'Memory, pointers, and software close to the machine.', level: 65, code: 'SYS-01' },
+        { icon: cppIcon, name: 'C++', description: 'Performance-oriented programs and modern systems tooling.', level: 75, code: 'SYS-02' },
+        { icon: rustIcon, name: 'Rust', description: 'Systems programming with strong safety guarantees.', level: 50, code: 'SYS-03' },
+        { icon: cudaIcon, name: 'CUDA', description: 'Parallel workloads and GPU computing fundamentals.', level: 60, code: 'HPC-01' },
+        { icon: pythonIcon, name: 'Python', description: 'Prototyping, automation, and scientific workflows.', level: 80, code: 'OPS-01' }
     ];
 </script>
 
-<section id="skills">
-    <h2 class="section-title">SKILLS</h2>
+<section class="section-shell" id="skills">
+    <div class="section-header">
+        <div>
+            <p class="section-kicker">02 // Systems online</p>
+            <h2 class="section-title">Core <em>systems</em></h2>
+        </div>
+        <p class="section-intro">
+            A growing toolkit for working across the stack—from low-level languages to parallel computing
+            and fast experimentation.
+        </p>
+    </div>
+
     <div class="skills-grid">
         {#each skills as skill}
-            <SkillCard 
-                icon={skill.icon}
-                name={skill.name}
-                description={skill.description}
-                level={skill.level}
-            />
+            <SkillCard {...skill} />
         {/each}
     </div>
 </section>
 
 <style>
-    section {
-        padding: 5rem 2rem;
-        max-width: 1200px;
-        margin: 0 auto;
-    }
-
-    .section-title {
-        font-family: 'Orbitron', sans-serif;
-        font-size: 2.5rem;
-        color: var(--star-wars-yellow);
-        text-align: center;
-        margin-bottom: 3rem;
-        letter-spacing: 3px;
-        text-shadow: 0 0 20px var(--star-wars-yellow);
-    }
-
     .skills-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-        gap: 2rem;
+        grid-template-columns: repeat(6, 1fr);
+        gap: 1rem;
+    }
+
+    .skills-grid :global(article) {
+        grid-column: span 2;
+    }
+
+    .skills-grid :global(article:nth-child(4)) {
+        grid-column: 2 / span 2;
+    }
+
+    @media (max-width: 900px) {
+        .skills-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .skills-grid :global(article),
+        .skills-grid :global(article:nth-child(4)) {
+            grid-column: auto;
+        }
+    }
+
+    @media (max-width: 560px) {
+        .skills-grid {
+            grid-template-columns: 1fr;
+        }
     }
 </style>

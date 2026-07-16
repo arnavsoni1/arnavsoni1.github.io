@@ -10,25 +10,31 @@
     import Footer from './lib/components/Footer.svelte';
 </script>
 
+<svelte:head>
+    <title>Arnav Soni — Systems & HPC</title>
+    <meta
+        name="description"
+        content="Arnav Soni is a student engineer exploring systems programming, high-performance computing, and low-level software."
+    />
+</svelte:head>
+
+<a class="skip-link" href="#main-content">Skip to mission log</a>
 <Starfield />
-<Navigation />
 
-<main>
-    <Hero />
-    <LightsaberDivider color="green" />
-    <About />
-    <LightsaberDivider color="blue" />
-    <Skills />
-    <LightsaberDivider color="green" />
-    <Projects />
-    <LightsaberDivider color="blue" />
-    <Contact />
-</main>
+<div class="app-shell">
+    <Navigation />
 
-<Footer />
+    <main id="main-content">
+        <Hero />
+        <LightsaberDivider color="yellow" label="Transmission 01" />
+        <About />
+        <LightsaberDivider color="blue" label="Transmission 02" />
+        <Skills />
+        <LightsaberDivider color="green" label="Transmission 03" />
+        <Projects />
+        <LightsaberDivider color="yellow" label="Open channel" />
+        <Contact />
+    </main>
 
-<style>
-    main {
-        min-height: 100vh;
-    }
-</style>
+    <Footer />
+</div>

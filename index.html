@@ -2,15 +2,111 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Arnav Soni - Developer Portfolio | A Star Wars themed showcase of projects and skills" />
-    <meta name="keywords" content="developer, portfolio, web development, programming, Arnav Soni" />
+    <meta name="theme-color" content="#03050a" />
+    <meta name="description" content="Arnav Soni — student engineer exploring systems programming and high-performance computing." />
+    <meta name="keywords" content="Arnav Soni, systems programming, high performance computing, developer portfolio" />
     <meta name="author" content="Arnav Soni" />
-    <title>Arnav Soni | Developer Portfolio</title>
+    <meta property="og:title" content="Arnav Soni — Systems & HPC" />
+    <meta property="og:description" content="Student engineer exploring systems programming and high-performance computing." />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://arnavsoni1.github.io/" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="/src/app.css" />
+    <title>Arnav Soni — Systems & HPC</title>
   </head>
   <body>
-    <div id="app"></div>
+    <div id="app">
+      <!--
+        Static fallback: GitHub Pages can serve this source file directly if the repository is
+        still set to "Deploy from a branch". The compiled Svelte app replaces it automatically.
+      -->
+      <div class="fallback-shell">
+        <header class="fallback-nav">
+          <a class="fallback-brand" href="#home">AS // SYSTEMS</a>
+          <nav class="fallback-nav-links" aria-label="Fallback navigation">
+            <a href="#about">Profile</a>
+            <a href="#skills">Systems</a>
+            <a href="#projects">Missions</a>
+            <a href="#contact">Contact</a>
+          </nav>
+        </header>
+
+        <main class="fallback-main">
+          <section class="fallback-hero" id="home">
+            <div>
+              <p class="fallback-eyebrow">Transmission received // Portfolio 2026</p>
+              <h1 class="fallback-title"><span>Arnav</span><span>Soni</span></h1>
+              <p class="fallback-copy">
+                Student engineer exploring low-level systems and high-performance computing—building
+                closer to the metal and learning how machines really work.
+              </p>
+              <div class="fallback-actions">
+                <a class="button button--primary" href="#projects">Explore missions</a>
+                <a class="button" href="https://github.com/arnavsoni1">View GitHub</a>
+              </div>
+            </div>
+            <div class="fallback-orbit" aria-hidden="true">
+              <span class="fallback-orbit-label">System online // IND-07</span>
+            </div>
+          </section>
+
+          <section class="fallback-section" id="about">
+            <p class="data-label">01 // Identity file</p>
+            <h2>Mission brief</h2>
+            <div class="fallback-panel">
+              <p>
+                I use projects to understand how software, hardware, and performance fit together.
+                Low-level computing is where abstract ideas meet real constraints—and that is what
+                keeps me curious.
+              </p>
+            </div>
+          </section>
+
+          <section class="fallback-section" id="skills">
+            <p class="data-label">02 // Systems online</p>
+            <h2>Core systems</h2>
+            <div class="fallback-grid">
+              <article class="fallback-card">
+                <span class="data-label">SYS-01</span>
+                <strong>Low level</strong>
+                <p>C, C++, Rust, memory, and software close to the machine.</p>
+              </article>
+              <article class="fallback-card">
+                <span class="data-label">HPC-01</span>
+                <strong>Performance</strong>
+                <p>Parallel workloads, CUDA, data movement, and GPU fundamentals.</p>
+              </article>
+              <article class="fallback-card">
+                <span class="data-label">OPS-01</span>
+                <strong>Tooling</strong>
+                <p>Python, experimentation, automation, and scientific workflows.</p>
+              </article>
+            </div>
+          </section>
+
+          <section class="fallback-section" id="projects">
+            <p class="data-label">03 // Mission archive</p>
+            <h2>Selected work</h2>
+            <div class="fallback-panel">
+              <p>Your project slots are ready. Add the real mission data in <strong>Projects.svelte</strong> when you are ready.</p>
+            </div>
+          </section>
+
+          <section class="fallback-section" id="contact">
+            <div class="fallback-panel fallback-contact">
+              <div>
+                <p class="data-label">04 // Open channel</p>
+                <h2>Start a transmission</h2>
+              </div>
+              <a class="button button--primary" href="mailto:arnavsoni2007@gmail.com">Send a message</a>
+            </div>
+          </section>
+        </main>
+      </div>
+    </div>
     <script type="module" src="/src/main.js"></script>
   </body>
 </html>

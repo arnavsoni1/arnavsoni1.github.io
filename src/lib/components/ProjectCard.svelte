@@ -3,97 +3,200 @@
     export let title;
     export let description;
     export let tech = [];
-    export let projectLink = '#';
-    export let sourceLink = '#';
+    export let projectLink = '';
+    export let sourceLink = '';
+    export let status = 'In development';
 </script>
 
-<div class="project-card">
-    <span class="project-number">{number.toString().padStart(2, '0')}</span>
-    <h3 class="project-title">{title}</h3>
-    <p class="project-description">{description}</p>
-    <div class="project-tech">
-        {#each tech as t}
-            <span class="tech-tag">{t}</span>
-        {/each}
+<article class="project-card panel">
+    <div class="project-index">
+        <span>Mission</span>
+        <strong>{String(number).padStart(2, '0')}</strong>
     </div>
-    <div class="project-links">
-        <a href={projectLink} class="project-link" target="_blank" rel="noreferrer">VIEW PROJECT</a>
-        <a href={sourceLink} class="project-link" target="_blank" rel="noreferrer">SOURCE CODE</a>
+
+    <div class="project-body">
+        <div class="project-status"><i></i>{status}</div>
+        <h3>{title}</h3>
+        <p>{description}</p>
+
+        <ul class="project-tech" aria-label="Technologies">
+            {#each tech as item}
+                <li>{item}</li>
+            {/each}
+        </ul>
     </div>
-</div>
+
+    <div class="project-actions">
+        {#if sourceLink}
+            <a href={sourceLink} target="_blank" rel="noreferrer">Source <span aria-hidden="true">↗</span></a>
+        {:else}
+            <span class="pending-link">Source link pending</span>
+        {/if}
+
+        {#if projectLink}
+            <a href={projectLink} target="_blank" rel="noreferrer">Live project <span aria-hidden="true">↗</span></a>
+        {:else}
+            <span class="pending-link">Demo link pending</span>
+        {/if}
+    </div>
+</article>
 
 <style>
     .project-card {
-        background: linear-gradient(135deg, rgba(26, 26, 46, 0.9), rgba(10, 10, 10, 0.95));
-        border: 1px solid transparent;
-        border-image: linear-gradient(135deg, var(--lightsaber-blue), var(--lightsaber-green)) 1;
-        padding: 2rem;
-        position: relative;
+        display: grid;
+        min-height: 24rem;
+        grid-template-columns: 5.2rem 1fr;
         overflow: hidden;
-        transition: all 0.3s ease;
+        transition: border-color 200ms ease, transform 200ms ease, box-shadow 200ms ease;
     }
 
     .project-card:hover {
-        transform: scale(1.02);
-        box-shadow: 0 0 40px rgba(0, 212, 255, 0.2);
+        transform: translateY(-4px);
+        border-color: var(--line-strong);
+        box-shadow: 0 2rem 5rem rgba(0, 0, 0, 0.28), 0 0 2rem rgba(100, 217, 255, 0.055);
     }
 
-    .project-number {
-        font-family: 'Orbitron', sans-serif;
-        font-size: 4rem;
-        color: rgba(255, 232, 31, 0.1);
-        position: absolute;
-        top: 10px;
-        right: 20px;
+    .project-index {
+        display: flex;
+        align-items: center;
+        flex-direction: column;
+        padding: 1.5rem 0.8rem;
+        border-right: 1px solid var(--line);
     }
 
-    .project-title {
-        font-family: 'Orbitron', sans-serif;
-        font-size: 1.5rem;
-        color: var(--star-wars-yellow);
-        margin-bottom: 1rem;
+    .project-index span {
+        color: var(--muted);
+        font-family: var(--display);
+        font-size: 0.44rem;
+        font-weight: 700;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        writing-mode: vertical-rl;
     }
 
-    .project-description {
-        color: var(--text-light);
-        line-height: 1.6;
-        margin-bottom: 1.5rem;
+    .project-index strong {
+        margin-top: auto;
+        color: transparent;
+        font-family: var(--display);
+        font-size: 2.7rem;
+        font-weight: 800;
+        line-height: 1;
+        -webkit-text-stroke: 1px var(--yellow);
+    }
+
+    .project-body {
+        padding: clamp(1.5rem, 4vw, 2.3rem);
+    }
+
+    .project-status {
+        display: flex;
+        gap: 0.5rem;
+        align-items: center;
+        color: var(--green);
+        font-family: var(--display);
+        font-size: 0.46rem;
+        font-weight: 700;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+    }
+
+    .project-status i {
+        width: 0.38rem;
+        height: 0.38rem;
+        border-radius: 50%;
+        background: currentColor;
+        box-shadow: 0 0 8px currentColor;
+    }
+
+    h3 {
+        margin: 1.3rem 0 1rem;
+        color: var(--text);
+        font-family: var(--display);
+        font-size: clamp(1.25rem, 3vw, 1.75rem);
+        font-weight: 700;
+        letter-spacing: -0.03em;
+        line-height: 1.15;
+        text-transform: uppercase;
+    }
+
+    .project-body > p {
+        color: var(--muted);
+        font-size: 0.96rem;
+        line-height: 1.65;
     }
 
     .project-tech {
         display: flex;
         flex-wrap: wrap;
-        gap: 0.5rem;
-        margin-bottom: 1.5rem;
+        gap: 0.45rem;
+        margin-top: 1.5rem;
+        list-style: none;
     }
 
-    .tech-tag {
-        padding: 0.3rem 0.8rem;
-        background: rgba(0, 212, 255, 0.1);
-        border: 1px solid var(--lightsaber-blue);
-        border-radius: 20px;
-        font-size: 0.8rem;
-        color: var(--lightsaber-blue);
+    .project-tech li {
+        padding: 0.38rem 0.6rem;
+        border: 1px solid var(--line);
+        color: var(--blue-bright);
+        font-family: var(--display);
+        font-size: 0.45rem;
+        font-weight: 700;
+        letter-spacing: 0.1em;
+        text-transform: uppercase;
     }
 
-    .project-links {
+    .project-actions {
         display: flex;
-        gap: 1rem;
+        grid-column: 1 / -1;
+        border-top: 1px solid var(--line);
     }
 
-    .project-link {
-        padding: 0.5rem 1.5rem;
-        font-family: 'Orbitron', sans-serif;
-        font-size: 0.8rem;
+    .project-actions > * {
+        flex: 1;
+        padding: 0.9rem 1.2rem;
+    }
+
+    .project-actions > * + * {
+        border-left: 1px solid var(--line);
+    }
+
+    .project-actions a,
+    .pending-link {
+        color: var(--blue-bright);
+        font-family: var(--display);
+        font-size: 0.48rem;
+        font-weight: 700;
+        letter-spacing: 0.13em;
         text-decoration: none;
-        border: 1px solid var(--lightsaber-green);
-        color: var(--lightsaber-green);
-        transition: all 0.3s ease;
+        text-transform: uppercase;
     }
 
-    .project-link:hover {
-        background: var(--lightsaber-green);
-        color: var(--dark-space);
-        box-shadow: 0 0 20px var(--lightsaber-green);
+    .project-actions a {
+        display: flex;
+        justify-content: space-between;
+        transition: color 180ms ease, background 180ms ease;
+    }
+
+    .project-actions a:hover {
+        background: rgba(100, 217, 255, 0.07);
+        color: var(--yellow);
+    }
+
+    .pending-link {
+        color: rgba(142, 165, 175, 0.55);
+    }
+
+    @media (max-width: 500px) {
+        .project-card {
+            grid-template-columns: 3.6rem 1fr;
+        }
+
+        .project-actions {
+            flex-direction: column;
+        }
+
+        .project-actions > * + * {
+            border-top: 1px solid var(--line);
+            border-left: 0;
+        }
     }
 </style>

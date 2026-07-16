@@ -1,61 +1,75 @@
 <script>
     import ProjectCard from './ProjectCard.svelte';
 
+    // Replace these placeholder objects with your own projects when ready.
     const projects = [
         {
             number: 1,
-            title: '(to be added)',
-            description: '(to be added)',
-            tech: ['React', '(to be added)', '(to be added)'],
-            projectLink: '(to be added)',
-            sourceLink: '(to be added)'
+            title: 'Flagship project',
+            description: 'Add a concise description of the problem, your approach, and the result of your most important project.',
+            tech: ['Language', 'Framework', 'Tooling'],
+            status: 'Awaiting mission data'
         },
-        
+        {
+            number: 2,
+            title: 'Systems project',
+            description: 'Use this slot for a low-level, performance, hardware, or high-performance computing project.',
+            tech: ['Systems', 'Performance', 'Research'],
+            status: 'Awaiting mission data'
+        },
+        {
+            number: 3,
+            title: 'Experimental build',
+            description: 'Show something curious here: a prototype, research exploration, write-up, or work in progress.',
+            tech: ['Prototype', 'Learning', 'Open source'],
+            status: 'Awaiting mission data'
+        }
     ];
 </script>
 
-<section id="projects">
-    <h2 class="section-title">PROJECTS</h2>
+<section class="section-shell" id="projects">
+    <div class="section-header">
+        <div>
+            <p class="section-kicker">03 // Mission archive</p>
+            <h2 class="section-title">Selected <em>work</em></h2>
+        </div>
+        <p class="section-intro">
+            Project cards are ready for your real mission data. Update the small array at the top of
+            <code>Projects.svelte</code> whenever you are ready.
+        </p>
+    </div>
+
     <div class="projects-grid">
         {#each projects as project}
-            <ProjectCard 
-                number={project.number}
-                title={project.title}
-                description={project.description}
-                tech={project.tech}
-                projectLink={project.projectLink}
-                sourceLink={project.sourceLink}
-            />
+            <ProjectCard {...project} />
         {/each}
     </div>
 </section>
 
 <style>
-    section {
-        padding: 5rem 2rem;
-        max-width: 1200px;
-        margin: 0 auto;
-    }
-
-    .section-title {
-        font-family: 'Orbitron', sans-serif;
-        font-size: 2.5rem;
-        color: var(--star-wars-yellow);
-        text-align: center;
-        margin-bottom: 3rem;
-        letter-spacing: 3px;
-        text-shadow: 0 0 20px var(--star-wars-yellow);
+    code {
+        color: var(--blue-bright);
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 0.9em;
     }
 
     .projects-grid {
         display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-        gap: 2rem;
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+        gap: 1rem;
     }
 
-    @media (max-width: 768px) {
+    .projects-grid :global(article:first-child) {
+        grid-column: 1 / -1;
+    }
+
+    @media (max-width: 760px) {
         .projects-grid {
             grid-template-columns: 1fr;
+        }
+
+        .projects-grid :global(article:first-child) {
+            grid-column: auto;
         }
     }
 </style>

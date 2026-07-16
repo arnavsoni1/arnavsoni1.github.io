@@ -1,114 +1,139 @@
 <script>
-    import { onMount } from 'svelte';
-
     export let icon;
     export let name;
     export let description;
     export let level;
-
-    let visible = false;
-    let cardElement;
-    let animatedWidth = '0%';
-
-    onMount(() => {
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    visible = true;
-                    setTimeout(() => {
-                        animatedWidth = `${level}%`;
-                    }, 100);
-                }
-            });
-        }, { threshold: 0.5 });
-
-        if (cardElement) {
-            observer.observe(cardElement);
-        }
-
-        return () => {
-            if (cardElement) {
-                observer.unobserve(cardElement);
-            }
-        };
-    });
+    export let code = 'SYS';
 </script>
 
-<div class="skill-card" bind:this={cardElement}>
-    <div class="skill-icon"><img src={icon} alt={name} /></div>
-    <h3 class="skill-name">{name}</h3>
-    <p>{description}</p>
-    <div class="skill-level">
-        <div class="skill-level-fill" style="width: {animatedWidth}"></div>
+<article class="skill-card panel">
+    <div class="skill-topline">
+        <span>{code}</span>
+        <span class="status"><i></i> Active</span>
     </div>
-</div>
+
+    <div class="skill-icon">
+        <img src={icon} alt="" />
+    </div>
+
+    <h3>{name}</h3>
+    <p>{description}</p>
+
+    <div class="meter" aria-label={`${name} familiarity: ${level} percent`}>
+        <div class="meter-data">
+            <span>Familiarity</span>
+            <span>{level}%</span>
+        </div>
+        <div class="meter-track"><i style={`--level: ${level}%`}></i></div>
+    </div>
+</article>
 
 <style>
     .skill-card {
-        background: linear-gradient(135deg, rgba(26, 26, 46, 0.8), rgba(10, 10, 10, 0.9));
-        border: 1px solid var(--lightsaber-blue);
-        padding: 2rem;
-        border-radius: 10px;
-        text-align: center;
-        transition: all 0.3s ease;
-        position: relative;
-        overflow: hidden;
-    }
-
-    .skill-card::before {
-        content: '';
-        position: absolute;
-        top: -50%;
-        left: -50%;
-        width: 200%;
-        height: 200%;
-        background: linear-gradient(45deg, transparent, rgba(0, 212, 255, 0.1), transparent);
-        transform: rotate(45deg);
-        transition: all 0.5s ease;
+        min-height: 22rem;
+        padding: 1.2rem;
+        transition: transform 200ms ease, border-color 200ms ease, box-shadow 200ms ease;
     }
 
     .skill-card:hover {
-        transform: translateY(-10px);
-        box-shadow: 0 10px 40px rgba(0, 212, 255, 0.3);
-        border-color: var(--star-wars-yellow);
+        transform: translateY(-5px);
+        border-color: var(--line-strong);
+        box-shadow: 0 1.8rem 5rem rgba(0, 0, 0, 0.28), 0 0 2.2rem rgba(100, 217, 255, 0.06);
     }
 
-    .skill-card:hover::before {
-        left: 100%;
+    .skill-topline {
+        display: flex;
+        justify-content: space-between;
+        padding-bottom: 0.8rem;
+        border-bottom: 1px solid var(--line);
+        color: var(--blue);
+        font-family: var(--display);
+        font-size: 0.46rem;
+        font-weight: 700;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+    }
+
+    .status {
+        display: inline-flex;
+        gap: 0.36rem;
+        align-items: center;
+        color: var(--green);
+    }
+
+    .status i {
+        width: 0.32rem;
+        height: 0.32rem;
+        border-radius: 50%;
+        background: currentColor;
+        box-shadow: 0 0 8px currentColor;
     }
 
     .skill-icon {
-        font-size: 3rem;
-        margin-bottom: 1rem;
+        display: grid;
+        width: 5rem;
+        height: 5rem;
+        place-items: center;
+        margin: 2rem 0 1.5rem;
+        border: 1px solid var(--line);
+        border-radius: 50%;
+        background: radial-gradient(circle, rgba(100, 217, 255, 0.12), transparent 68%);
     }
 
     .skill-icon img {
-        width: 64px;
-        height: 64px;
+        width: 3.15rem;
+        height: 3.15rem;
         object-fit: contain;
+        filter: saturate(0.82) brightness(1.08);
     }
 
-    .skill-name {
-        font-family: 'Orbitron', sans-serif;
-        font-size: 1.2rem;
-        color: var(--star-wars-yellow);
-        margin-bottom: 0.5rem;
+    h3 {
+        margin-bottom: 0.65rem;
+        color: var(--text);
+        font-family: var(--display);
+        font-size: 1rem;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
     }
 
-    .skill-level {
-        width: 100%;
-        height: 8px;
-        background: rgba(255, 255, 255, 0.1);
-        border-radius: 4px;
-        overflow: hidden;
-        margin-top: 1rem;
+    p {
+        min-height: 3rem;
+        color: var(--muted);
+        font-size: 0.9rem;
+        line-height: 1.5;
     }
 
-    .skill-level-fill {
+    .meter {
+        margin-top: 1.6rem;
+    }
+
+    .meter-data {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 0.55rem;
+        color: var(--muted);
+        font-family: var(--display);
+        font-size: 0.44rem;
+        font-weight: 700;
+        letter-spacing: 0.12em;
+        text-transform: uppercase;
+    }
+
+    .meter-data span:last-child {
+        color: var(--yellow);
+    }
+
+    .meter-track {
+        height: 3px;
+        background: rgba(255, 255, 255, 0.08);
+    }
+
+    .meter-track i {
+        display: block;
+        width: var(--level);
         height: 100%;
-        background: linear-gradient(90deg, var(--lightsaber-blue), var(--lightsaber-green));
-        box-shadow: 0 0 10px var(--lightsaber-blue);
-        border-radius: 4px;
-        transition: width 1s ease;
+        background: linear-gradient(90deg, var(--blue), var(--green));
+        box-shadow: 0 0 8px var(--blue);
     }
 </style>
