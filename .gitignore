@@ -22,3 +22,6 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Local visual reference used to derive the scroll freighter asset.
+millenium_falcon.png

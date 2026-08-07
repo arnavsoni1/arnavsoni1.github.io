@@ -1,272 +1,176 @@
-<section class="section-shell about" id="about">
-    <div class="section-header">
-        <div>
-            <p class="section-kicker">01 // Identity file</p>
-            <h2 class="section-title">Mission <em>brief</em></h2>
-        </div>
-        <p class="section-intro">
-            Curious about what happens beneath the abstraction layer, I use projects as a way to learn
-            how software, hardware, and performance fit together.
-        </p>
+<section class="about page-section" id="about">
+    <div class="section-heading" data-reveal>
+        <p class="section-label">About me</p>
+        <h2>Curious by <em>default.</em></h2>
     </div>
 
-    <div class="about-grid">
-        <div class="identity-card panel">
-            <div class="identity-topline">
-                <span>Personnel record</span>
-                <span class="clearance">Open file</span>
-            </div>
-
-            <div class="portrait" aria-label="Arnav Soni monogram">
-                <span>AS</span>
-                <i class="portrait-ring portrait-ring--one"></i>
-                <i class="portrait-ring portrait-ring--two"></i>
-            </div>
-
-            <div class="identity-data">
-                <div>
-                    <small>Designation</small>
-                    <strong>Student engineer</strong>
-                </div>
-                <div>
-                    <small>Primary sector</small>
-                    <strong>Systems / HPC</strong>
-                </div>
-            </div>
-        </div>
-
-        <div class="briefing">
-            <p class="data-label">Personal log // 001</p>
-            <h3>I like software that explains the machine.</h3>
+    <div class="about-layout">
+        <div class="about-card" data-reveal data-reveal-tilt="-2">
+            <span class="about-number">01</span>
             <p>
-                Low-level computing is where abstract ideas meet real constraints: memory, concurrency,
-                data movement, and hardware. That tension is what keeps me curious.
+                I’m a student engineer drawn to the part of computing where abstractions stop being
+                magic and start becoming memory, threads, instructions, and data movement.
             </p>
             <p>
-                I build to understand. Each project is a new system to take apart, measure, and put back
-                together with a little more clarity than before.
+                I learn by making things, measuring them, breaking them, and understanding why the
+                machine behaved the way it did.
             </p>
-
-            <div class="principles">
-                <div>
-                    <span>01</span>
-                    <strong>Stay curious</strong>
-                    <p>Follow questions all the way down the stack.</p>
-                </div>
-                <div>
-                    <span>02</span>
-                    <strong>Build to learn</strong>
-                    <p>Turn theory into something observable and real.</p>
-                </div>
-                <div>
-                    <span>03</span>
-                    <strong>Share the map</strong>
-                    <p>Make complex systems easier for others to explore.</p>
-                </div>
-            </div>
+            <span class="tape" aria-hidden="true"></span>
         </div>
+
+        <div class="about-quote" data-reveal>
+            <span class="quote-mark">“</span>
+            <blockquote>I like software that makes the machine feel less mysterious.</blockquote>
+            <div class="scribble" aria-hidden="true"></div>
+        </div>
+    </div>
+
+    <div class="principles">
+        <article data-reveal>
+            <span>✦</span>
+            <h3>Follow the question</h3>
+            <p>Keep digging until the answer is concrete enough to test.</p>
+        </article>
+        <article data-reveal>
+            <span>⌁</span>
+            <h3>Build the proof</h3>
+            <p>Turn theory into something observable, measurable, and real.</p>
+        </article>
+        <article data-reveal>
+            <span>◎</span>
+            <h3>Share the clarity</h3>
+            <p>Explain complicated systems without hiding behind complicated language.</p>
+        </article>
     </div>
 </section>
 
 <style>
-    .about-grid {
+    .about {
+        position: relative;
+    }
+
+    .about-layout {
         display: grid;
-        grid-template-columns: minmax(18rem, 0.75fr) minmax(0, 1.25fr);
+        grid-template-columns: minmax(0, 1.05fr) minmax(18rem, 0.8fr);
         gap: clamp(2rem, 7vw, 6rem);
         align-items: center;
+        margin-top: 4rem;
     }
 
-    .identity-card {
-        padding: 1rem;
-    }
-
-    .identity-topline {
-        display: flex;
-        justify-content: space-between;
-        padding-bottom: 0.9rem;
-        border-bottom: 1px solid var(--line);
-        color: var(--muted);
-        font-family: var(--display);
-        font-size: 0.48rem;
-        font-weight: 700;
-        letter-spacing: 0.15em;
-        text-transform: uppercase;
-    }
-
-    .clearance {
-        color: var(--green);
-    }
-
-    .portrait {
-        display: grid;
+    .about-card {
         position: relative;
-        width: min(75%, 16rem);
-        aspect-ratio: 1;
-        place-items: center;
-        margin: 2.5rem auto;
-        border: 1px solid var(--line-strong);
-        border-radius: 50%;
-        background:
-            linear-gradient(90deg, transparent 49.7%, rgba(100, 217, 255, 0.14) 50%, transparent 50.3%),
-            linear-gradient(transparent 49.7%, rgba(100, 217, 255, 0.14) 50%, transparent 50.3%),
-            radial-gradient(circle, rgba(100, 217, 255, 0.1), transparent 66%);
-        box-shadow: 0 0 3rem rgba(100, 217, 255, 0.07);
+        padding: clamp(2rem, 5vw, 4.4rem);
+        border: 3px solid var(--ink);
+        border-radius: 2.8rem 1rem 3.6rem 1.4rem;
+        background: var(--cream);
+        box-shadow: 14px 16px 0 var(--coral), 18px 20px 0 var(--ink);
+        color: var(--ink);
     }
 
-    .portrait > span {
-        display: grid;
-        width: 44%;
-        height: 44%;
+    .about-number {
+        display: inline-grid;
+        width: 3.3rem;
+        height: 3.3rem;
         place-items: center;
-        border: 2px solid var(--yellow);
+        margin-bottom: 1.8rem;
+        border: 2px solid var(--ink);
         border-radius: 50%;
-        background: var(--space-raised);
-        color: var(--yellow);
+        background: var(--gold);
         font-family: var(--display);
-        font-size: clamp(1.4rem, 5vw, 2.6rem);
-        font-weight: 800;
-        letter-spacing: -0.06em;
-        box-shadow: 0 0 2rem rgba(255, 232, 31, 0.13), inset 0 0 1.4rem rgba(255, 232, 31, 0.05);
+        font-weight: 900;
     }
 
-    .portrait-ring {
+    .about-card p {
+        font-size: clamp(1.05rem, 2vw, 1.28rem);
+        line-height: 1.68;
+    }
+
+    .about-card p + p { margin-top: 1.2rem; }
+
+    .tape {
         position: absolute;
-        border: 1px dashed var(--line-strong);
-        border-radius: 50%;
+        top: -1.4rem;
+        right: 14%;
+        width: 7rem;
+        height: 2.3rem;
+        background: rgba(126, 222, 209, 0.74);
+        clip-path: polygon(3% 8%, 97% 0, 94% 94%, 0 100%);
+        transform: rotate(4deg);
     }
 
-    .portrait-ring--one {
-        width: 75%;
-        height: 75%;
-        animation: rotate 20s linear infinite;
+    .about-quote {
+        position: relative;
+        padding: 2rem 0 3rem;
     }
 
-    .portrait-ring--two {
-        width: 91%;
-        height: 91%;
-        border-style: dotted;
-        border-color: rgba(255, 232, 31, 0.35);
-        animation: rotate 30s linear infinite reverse;
-    }
-
-    .identity-data {
-        display: grid;
-        grid-template-columns: 1fr 1fr;
-        border-top: 1px solid var(--line);
-    }
-
-    .identity-data > div {
-        padding-top: 0.9rem;
-    }
-
-    .identity-data > div + div {
-        padding-left: 1rem;
-        border-left: 1px solid var(--line);
-    }
-
-    .identity-data small,
-    .identity-data strong {
+    .quote-mark {
         display: block;
+        height: 5rem;
+        color: var(--gold);
+        font-family: Georgia, serif;
+        font-size: 8rem;
+        line-height: 0.85;
+        text-shadow: 5px 5px 0 var(--ink);
+    }
+
+    blockquote {
+        color: var(--cream);
         font-family: var(--display);
-        text-transform: uppercase;
-    }
-
-    .identity-data small {
-        margin-bottom: 0.35rem;
-        color: var(--muted);
-        font-size: 0.42rem;
-        letter-spacing: 0.14em;
-    }
-
-    .identity-data strong {
-        color: var(--blue-bright);
-        font-size: 0.55rem;
-        letter-spacing: 0.08em;
-    }
-
-    .briefing h3 {
-        max-width: 36rem;
-        margin: 1.1rem 0 1.5rem;
-        font-family: var(--display);
-        font-size: clamp(1.75rem, 4vw, 3.2rem);
-        font-weight: 700;
+        font-size: clamp(2rem, 5vw, 4rem);
+        font-weight: 800;
         letter-spacing: -0.045em;
-        line-height: 1.08;
-        text-transform: uppercase;
+        line-height: 1.05;
+        text-wrap: balance;
     }
 
-    .briefing > p:not(.data-label) {
-        max-width: 40rem;
-        margin-top: 1rem;
-        color: var(--muted);
-        font-size: 1.03rem;
+    .scribble {
+        width: 80%;
+        height: 1.4rem;
+        margin-top: 1.8rem;
+        border-top: 4px solid var(--mint);
+        border-radius: 50%;
+        transform: rotate(-2deg);
     }
 
     .principles {
         display: grid;
         grid-template-columns: repeat(3, 1fr);
-        margin-top: 2.5rem;
-        border-top: 1px solid var(--line);
+        gap: 1.2rem;
+        margin-top: 6rem;
     }
 
-    .principles > div {
-        padding: 1.25rem 1rem 0 0;
+    .principles article {
+        min-height: 17rem;
+        padding: 2rem;
+        border: 2px solid rgba(244, 231, 197, 0.24);
+        border-radius: 2.2rem 0.8rem 2.2rem 0.8rem;
+        background: rgba(17, 25, 38, 0.78);
+        box-shadow: inset 0 1px rgba(255, 255, 255, 0.05);
+        backdrop-filter: blur(10px);
     }
 
-    .principles > div + div {
-        padding-left: 1rem;
-        border-left: 1px solid var(--line);
-    }
-
-    .principles span,
-    .principles strong {
-        display: block;
-        font-family: var(--display);
-    }
+    .principles article:nth-child(2) { transform: translateY(1.8rem) rotate(1deg); }
+    .principles article:nth-child(3) { transform: rotate(-1deg); }
 
     .principles span {
-        margin-bottom: 0.7rem;
-        color: var(--yellow);
-        font-size: 0.52rem;
+        color: var(--mint);
+        font-size: 2.2rem;
     }
 
-    .principles strong {
-        margin-bottom: 0.45rem;
-        color: var(--text);
-        font-size: 0.64rem;
-        letter-spacing: 0.08em;
-        text-transform: uppercase;
+    .principles h3 {
+        margin: 2rem 0 0.8rem;
+        color: var(--cream);
+        font-family: var(--display);
+        font-size: 1.4rem;
+        line-height: 1.1;
     }
 
-    .principles p {
-        color: var(--muted);
-        font-size: 0.82rem;
-        line-height: 1.5;
-    }
+    .principles p { color: var(--paper-muted); line-height: 1.6; }
 
-    @keyframes rotate {
-        to { transform: rotate(360deg); }
-    }
-
-    @media (max-width: 850px) {
-        .about-grid {
-            grid-template-columns: 1fr;
-        }
-
-        .identity-card {
-            width: min(100%, 28rem);
-            margin: 0 auto;
-        }
-    }
-
-    @media (max-width: 560px) {
-        .principles {
-            grid-template-columns: 1fr;
-        }
-
-        .principles > div + div {
-            padding-left: 0;
-            border-left: 0;
-        }
+    @media (max-width: 800px) {
+        .about-layout { grid-template-columns: 1fr; }
+        .principles { grid-template-columns: 1fr; }
+        .principles article { min-height: auto; }
+        .principles article:nth-child(2), .principles article:nth-child(3) { transform: none; }
     }
 </style>

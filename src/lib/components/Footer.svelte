@@ -1,88 +1,190 @@
 <script>
     const year = new Date().getFullYear();
+    const links = [
+        {
+            label: 'LinkedIn',
+            detail: 'Connect with me',
+            href: 'https://www.linkedin.com/in/arnav-soni-11812b325/'
+        },
+        {
+            label: 'Twitter / X',
+            detail: '@arnavsoni1',
+            href: 'https://x.com/arnavsoni1'
+        },
+        {
+            label: 'Email',
+            detail: 'arnavsoni2007@gmail.com',
+            href: 'mailto:arnavsoni2007@gmail.com'
+        }
+    ];
 </script>
 
-<footer>
-    <div class="footer-shell">
-        <a class="footer-mark" href="#home" aria-label="Back to top">AS</a>
-        <p>Designed and engineered by Arnav Soni. No droids were harmed in the build.</p>
-        <div class="footer-meta">
-            <span>© {year}</span>
-            <span class="status"><i></i> System online</span>
+<footer id="contact">
+    <div class="contact-card" data-reveal>
+        <div class="contact-copy">
+            <p class="section-label">Contact me</p>
+            <h2>Let’s make something <em>interesting.</em></h2>
+            <p>I’m always happy to talk systems, performance, open source, or an idea that sounds slightly impossible.</p>
         </div>
+
+        <div class="contact-links">
+            {#each links as link}
+                <a href={link.href} target={link.href.startsWith('http') ? '_blank' : undefined} rel="noreferrer">
+                    <span>
+                        <small>{link.label}</small>
+                        <strong>{link.detail}</strong>
+                    </span>
+                    <i aria-hidden="true">↗</i>
+                </a>
+            {/each}
+        </div>
+
+        <span class="footer-star star-doodle star-a" aria-hidden="true">✦</span>
+        <span class="footer-star star-doodle star-b" aria-hidden="true">✷</span>
+    </div>
+
+    <div class="footer-line">
+        <a href="#home" class="footer-brand">Arnav Soni</a>
+        <p>Built with curiosity and an unreasonable number of moving parts.</p>
+        <span>© {year}</span>
     </div>
 </footer>
 
 <style>
     footer {
-        border-top: 1px solid var(--line);
-        background: rgba(3, 5, 10, 0.62);
-    }
-
-    .footer-shell {
-        display: grid;
-        width: min(1120px, calc(100% - 3rem));
-        min-height: 7rem;
-        grid-template-columns: auto 1fr auto;
-        gap: 1.5rem;
-        align-items: center;
+        position: relative;
+        z-index: 2;
+        width: min(1220px, calc(100% - 3rem));
         margin: 0 auto;
+        padding: 6rem 0 2rem;
     }
 
-    .footer-mark {
+    .contact-card {
         display: grid;
-        width: 2.6rem;
-        height: 2.6rem;
-        place-items: center;
-        border: 1px solid var(--yellow);
-        border-radius: 50%;
-        color: var(--yellow);
+        position: relative;
+        grid-template-columns: minmax(0, 1.05fr) minmax(20rem, 0.95fr);
+        gap: clamp(2rem, 6vw, 6rem);
+        overflow: hidden;
+        padding: clamp(2rem, 6vw, 5rem);
+        border: 3px solid var(--ink);
+        border-radius: 3.5rem 1.2rem 3.5rem 1.2rem;
+        background: var(--cream);
+        box-shadow: 15px 17px 0 var(--gold), 19px 21px 0 var(--ink);
+        color: var(--ink);
+    }
+
+    .contact-copy {
+        position: relative;
+        z-index: 2;
+    }
+
+    .contact-copy h2 {
+        margin: 1rem 0 1.25rem;
         font-family: var(--display);
-        font-size: 0.6rem;
-        font-weight: 800;
-        text-decoration: none;
+        font-size: clamp(2.7rem, 6vw, 5.6rem);
+        font-weight: 900;
+        letter-spacing: -0.06em;
+        line-height: 0.96;
     }
 
-    p {
-        color: var(--muted);
-        font-size: 0.82rem;
+    .contact-copy h2 em {
+        color: var(--coral);
+        font-style: normal;
+        -webkit-text-stroke: 1px var(--ink);
     }
 
-    .footer-meta {
+    .contact-copy > p:last-child {
+        max-width: 37rem;
+        font-size: 1.08rem;
+        line-height: 1.6;
+    }
+
+    .contact-links {
+        display: grid;
+        position: relative;
+        z-index: 2;
+        gap: 0.8rem;
+        align-content: center;
+    }
+
+    .contact-links a {
         display: flex;
-        gap: 1.2rem;
-        color: var(--muted);
-        font-family: var(--display);
-        font-size: 0.45rem;
-        font-weight: 700;
-        letter-spacing: 0.13em;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1.2rem 1.25rem;
+        border: 2px solid var(--ink);
+        border-radius: 1.1rem 1.8rem 1rem 1.6rem;
+        background: var(--sky);
+        box-shadow: 5px 6px 0 var(--ink);
+        color: var(--ink);
+        text-decoration: none;
+        transition: transform 180ms ease, box-shadow 180ms ease, background 180ms ease;
+    }
+
+    .contact-links a:nth-child(2) { background: var(--mint); }
+    .contact-links a:nth-child(3) { background: var(--gold); }
+
+    .contact-links a:hover {
+        transform: translate(-2px, -3px) rotate(-0.5deg);
+        box-shadow: 8px 9px 0 var(--ink);
+    }
+
+    .contact-links small,
+    .contact-links strong {
+        display: block;
+    }
+
+    .contact-links small {
+        margin-bottom: 0.3rem;
+        font-size: 0.68rem;
+        font-weight: 900;
+        letter-spacing: 0.12em;
         text-transform: uppercase;
     }
 
-    .status {
-        display: flex;
-        gap: 0.4rem;
+    .contact-links strong {
+        overflow-wrap: anywhere;
+        font-size: 0.95rem;
+    }
+
+    .contact-links i {
+        font-family: var(--display);
+        font-size: 1.4rem;
+        font-style: normal;
+    }
+
+    .footer-star {
+        position: absolute;
+        color: var(--coral);
+        font-size: 3rem;
+    }
+
+    .star-a { top: 2rem; right: 45%; }
+    .star-b { right: 2rem; bottom: 1.2rem; color: var(--mint); font-size: 2rem; }
+
+    .footer-line {
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+        gap: 2rem;
         align-items: center;
-        color: var(--green);
+        padding: 4.5rem 0 1rem;
+        color: var(--paper-muted);
+        font-size: 0.77rem;
     }
 
-    .status i {
-        width: 0.34rem;
-        height: 0.34rem;
-        border-radius: 50%;
-        background: currentColor;
-        box-shadow: 0 0 7px currentColor;
+    .footer-brand {
+        color: var(--cream);
+        font-family: var(--display);
+        font-size: 1rem;
+        text-decoration: none;
+        text-transform: uppercase;
     }
 
-    @media (max-width: 700px) {
-        .footer-shell {
-            width: calc(100% - 2rem);
-            grid-template-columns: auto 1fr;
-            padding: 1.5rem 0;
-        }
+    .footer-line p { text-align: center; }
 
-        .footer-meta {
-            grid-column: 1 / -1;
-        }
+    @media (max-width: 780px) {
+        footer { width: calc(100% - 2rem); }
+        .contact-card { grid-template-columns: 1fr; }
+        .footer-line { grid-template-columns: 1fr; gap: 0.6rem; text-align: center; }
     }
 </style>

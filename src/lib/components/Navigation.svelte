@@ -1,57 +1,40 @@
 <script>
-    const navLinks = [
-        { href: '#about', label: 'Profile', code: '01' },
-        { href: '#skills', label: 'Systems', code: '02' },
-        { href: '#projects', label: 'Missions', code: '03' },
-        { href: '#contact', label: 'Contact', code: '04' }
+    const links = [
+        { href: '#about', label: 'About' },
+        { href: '#skills', label: 'Skills' },
+        { href: '#projects', label: 'Projects' },
+        { href: '#contact', label: 'Contact' }
     ];
 
     let menuOpen = false;
-
-    function closeMenu() {
-        menuOpen = false;
-    }
-
-    function handleKeydown(event) {
-        if (event.key === 'Escape') closeMenu();
-    }
+    const closeMenu = () => (menuOpen = false);
 </script>
 
-<svelte:window onkeydown={handleKeydown} />
+<svelte:window onkeydown={(event) => event.key === 'Escape' && closeMenu()} />
 
 <header class="site-header">
-    <nav class="nav-shell" aria-label="Primary navigation">
+    <nav aria-label="Primary navigation">
         <a class="brand" href="#home" aria-label="Arnav Soni, back to top" onclick={closeMenu}>
-            <span class="brand-mark" aria-hidden="true">AS</span>
-            <span class="brand-copy">
-                <strong>Arnav Soni</strong>
-                <small>Systems // HPC</small>
-            </span>
+            <span class="brand-star" aria-hidden="true">✦</span>
+            <span><strong>Arnav Soni</strong><small>Systems &amp; software</small></span>
         </a>
 
         <button
-            class:menu-button--open={menuOpen}
+            class:menu-open={menuOpen}
             class="menu-button"
             type="button"
             aria-label="Toggle navigation"
             aria-expanded={menuOpen}
-            aria-controls="nav-links"
             onclick={() => (menuOpen = !menuOpen)}
         >
-            <span></span>
-            <span></span>
+            <span></span><span></span>
         </button>
 
-        <div class:nav-links--open={menuOpen} class="nav-links" id="nav-links">
-            {#each navLinks as link}
-                <a href={link.href} onclick={closeMenu}>
-                    <span>{link.code}</span>
-                    {link.label}
-                </a>
+        <div class:links-open={menuOpen} class="nav-links">
+            {#each links as link}
+                <a href={link.href} onclick={closeMenu}>{link.label}</a>
             {/each}
-            <a class="github-link" href="https://github.com/arnavsoni1" target="_blank" rel="noreferrer">
-                GitHub <span aria-hidden="true">↗</span>
-            </a>
+            <a class="github" href="https://github.com/arnavsoni1" target="_blank" rel="noreferrer">GitHub ↗</a>
         </div>
     </nav>
 </header>
@@ -59,173 +42,146 @@
 <style>
     .site-header {
         position: fixed;
-        z-index: 1000;
-        top: 0;
+        z-index: 100;
+        top: 1.1rem;
         right: 0;
         left: 0;
-        border-bottom: 1px solid var(--line);
-        background: rgba(3, 5, 10, 0.78);
-        backdrop-filter: blur(18px) saturate(130%);
+        pointer-events: none;
     }
 
-    .site-header::after {
-        position: absolute;
-        right: 0;
-        bottom: -1px;
-        left: 0;
-        height: 1px;
-        background: linear-gradient(90deg, transparent, var(--blue), transparent);
-        content: '';
-        opacity: 0.35;
-    }
-
-    .nav-shell {
+    nav {
         display: flex;
-        width: min(1180px, calc(100% - 3rem));
-        min-height: 5rem;
+        width: min(1180px, calc(100% - 2rem));
+        min-height: 4.5rem;
         justify-content: space-between;
         align-items: center;
         margin: 0 auto;
+        padding: 0.55rem 0.65rem 0.55rem 1rem;
+        border: 2px solid rgba(244, 231, 197, 0.3);
+        border-radius: 999px;
+        background: rgba(12, 17, 25, 0.74);
+        box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.2), inset 0 1px rgba(255, 255, 255, 0.06);
+        backdrop-filter: blur(18px) saturate(125%);
+        pointer-events: auto;
     }
 
     .brand {
         display: inline-flex;
-        gap: 0.85rem;
+        gap: 0.8rem;
         align-items: center;
+        color: var(--cream);
         text-decoration: none;
     }
 
-    .brand-mark {
+    .brand-star {
         display: grid;
-        width: 2.35rem;
-        height: 2.35rem;
+        width: 2.55rem;
+        aspect-ratio: 1;
         place-items: center;
-        border: 1px solid var(--yellow);
         border-radius: 50%;
-        color: var(--yellow);
-        font-family: var(--display);
-        font-size: 0.58rem;
-        font-weight: 800;
-        letter-spacing: 0.04em;
-        box-shadow: inset 0 0 0 4px var(--space), inset 0 0 0 5px rgba(255, 232, 31, 0.25);
+        background: var(--gold);
+        box-shadow: inset 0 0 0 2px var(--ink), 0 0.4rem 1.2rem rgba(216, 165, 47, 0.25);
+        color: var(--ink);
+        font-size: 1.25rem;
     }
 
-    .brand-copy {
+    .brand > span:last-child {
         display: grid;
-        line-height: 1.2;
+        line-height: 1.05;
     }
 
-    .brand-copy strong {
-        color: var(--text);
+    .brand strong {
         font-family: var(--display);
-        font-size: 0.72rem;
-        letter-spacing: 0.13em;
+        font-size: 0.88rem;
+        letter-spacing: 0.02em;
         text-transform: uppercase;
     }
 
-    .brand-copy small {
-        margin-top: 0.24rem;
-        color: var(--muted);
-        font-family: var(--display);
-        font-size: 0.48rem;
-        letter-spacing: 0.18em;
+    .brand small {
+        margin-top: 0.3rem;
+        color: var(--paper-muted);
+        font-size: 0.67rem;
+        letter-spacing: 0.1em;
         text-transform: uppercase;
     }
 
     .nav-links {
         display: flex;
-        gap: clamp(1rem, 2.6vw, 2.25rem);
+        gap: 0.15rem;
         align-items: center;
     }
 
     .nav-links a {
-        display: inline-flex;
-        gap: 0.4rem;
-        align-items: center;
-        color: var(--muted);
-        font-family: var(--display);
-        font-size: 0.6rem;
+        padding: 0.72rem 0.9rem;
+        border-radius: 999px;
+        color: var(--paper-muted);
+        font-size: 0.78rem;
         font-weight: 700;
-        letter-spacing: 0.14em;
+        letter-spacing: 0.06em;
         text-decoration: none;
         text-transform: uppercase;
-        transition: color 180ms ease;
-    }
-
-    .nav-links a > span {
-        color: rgba(100, 217, 255, 0.58);
-        font-size: 0.48rem;
+        transition: background 180ms ease, color 180ms ease, transform 180ms ease;
     }
 
     .nav-links a:hover {
-        color: var(--yellow);
+        transform: translateY(-2px);
+        background: rgba(244, 231, 197, 0.1);
+        color: var(--cream);
     }
 
-    .nav-links .github-link {
-        padding: 0.64rem 0.9rem;
-        border: 1px solid var(--line-strong);
-        color: var(--text);
+    .nav-links .github {
+        margin-left: 0.25rem;
+        background: var(--coral);
+        color: var(--cream);
     }
 
     .menu-button {
         display: none;
         width: 2.8rem;
         height: 2.8rem;
-        border: 1px solid var(--line-strong);
-        background: transparent;
+        border: 0;
+        border-radius: 50%;
+        background: var(--gold);
         cursor: pointer;
     }
 
     .menu-button span {
         display: block;
         width: 1rem;
-        height: 1px;
-        margin: 0.32rem auto;
-        background: var(--text);
+        height: 2px;
+        margin: 0.28rem auto;
+        border-radius: 2px;
+        background: var(--ink);
         transition: transform 180ms ease;
     }
 
-    .menu-button--open span:first-child {
-        transform: translateY(3px) rotate(45deg);
-    }
+    .menu-open span:first-child { transform: translateY(3px) rotate(45deg); }
+    .menu-open span:last-child { transform: translateY(-3px) rotate(-45deg); }
 
-    .menu-button--open span:last-child {
-        transform: translateY(-3px) rotate(-45deg);
-    }
-
-    @media (max-width: 820px) {
-        .nav-shell {
-            width: calc(100% - 2rem);
-        }
-
-        .menu-button {
-            display: block;
-        }
+    @media (max-width: 760px) {
+        .site-header { top: 0.7rem; }
+        nav { border-radius: 1.5rem; }
+        .menu-button { display: block; }
 
         .nav-links {
             display: none;
             position: absolute;
-            top: calc(100% + 1px);
-            right: 0;
-            left: 0;
-            align-items: stretch;
-            padding: 1rem;
-            border-bottom: 1px solid var(--line);
-            background: rgba(3, 5, 10, 0.97);
+            top: calc(100% + 0.55rem);
+            right: 1rem;
+            left: 1rem;
+            padding: 0.8rem;
+            border: 2px solid rgba(244, 231, 197, 0.24);
+            border-radius: 1.35rem;
+            background: rgba(12, 17, 25, 0.96);
+            box-shadow: 0 1.5rem 3rem rgba(0, 0, 0, 0.35);
         }
 
-        .nav-links--open {
-            display: grid;
-        }
+        .links-open { display: grid; }
+        .nav-links a { padding: 0.9rem 1rem; }
+        .nav-links .github { margin: 0.35rem 0 0; text-align: center; }
+    }
 
-        .nav-links a {
-            justify-content: space-between;
-            padding: 0.9rem 0.5rem;
-            border-bottom: 1px solid rgba(157, 211, 232, 0.1);
-        }
-
-        .nav-links .github-link {
-            margin-top: 0.5rem;
-        }
+    @media (max-width: 430px) {
+        .brand small { display: none; }
     }
 </style>

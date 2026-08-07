@@ -1,6 +1,6 @@
 # Arnav Soni — Portfolio
 
-A responsive, two-dimensional space-opera portfolio built with Svelte 5 and Vite. It uses CSS artwork and animation only—no music, sound, 3D libraries, or licensed image assets.
+An illustrated space-gallery portfolio built with Svelte 5 and Vite. The background Falcon is procedural Three.js geometry, GSAP drives scroll choreography, Lenis provides smooth scrolling, and Anime.js handles ambient character and exhibit motion.
 
 ## Local development
 
@@ -28,10 +28,10 @@ The repository root also contains a styled static fallback. If Pages is accident
 
 ## Updating content
 
-- Project cards: `src/lib/components/Projects.svelte`
+- Empty project exhibits: `src/lib/components/Projects.svelte`
 - Skills: `src/lib/components/Skills.svelte`
 - Bio: `src/lib/components/About.svelte`
-- Contact links: `src/lib/components/Contact.svelte`
+- Contact links: `src/lib/components/Footer.svelte`
 - Hero copy: `src/lib/components/Hero.svelte`
 
-The project and skill arrays are intentionally kept near the top of their components so they are easy to replace.
+The project exhibits are intentionally empty until real work is ready to be added.
