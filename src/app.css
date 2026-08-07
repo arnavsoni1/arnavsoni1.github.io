@@ -243,10 +243,6 @@ canvas {
     backdrop-filter: blur(10px);
 }
 
-.star-doodle {
-    transform-origin: center;
-}
-
 /* The source-branch fallback stays readable if GitHub Pages is not using the Vite workflow. */
 .fallback-shell {
     position: relative;

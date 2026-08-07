@@ -99,19 +99,6 @@
                 );
             });
 
-            document.querySelectorAll('.star-doodle').forEach((star, index) => {
-                ambientAnimations.push(
-                    animate(star, {
-                        scale: 1.35,
-                        opacity: 0.38,
-                        duration: 1100 + index * 170,
-                        delay: index * 90,
-                        alternate: true,
-                        loop: true,
-                        ease: 'inOutSine'
-                    })
-                );
-            });
         }
 
         ScrollTrigger.refresh();

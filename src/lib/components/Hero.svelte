@@ -16,14 +16,10 @@
     </div>
 
     <div class="hero-art" data-parallax="6" aria-hidden="true">
-        <div class="planet-ring exhibit-orbit"></div>
         <div class="planet">
             <span class="planet-line planet-line-one"></span>
             <span class="planet-line planet-line-two"></span>
         </div>
-        <span class="star-doodle star-one">✦</span>
-        <span class="star-doodle star-two">✦</span>
-        <span class="star-doodle star-three">✷</span>
         <div class="hero-sticker">
             <strong>C · C++ · RUST</strong>
             <span>GPU · SYSTEMS · CURIOSITY</span>
@@ -120,8 +116,7 @@
         opacity: 0.82;
     }
 
-    .planet,
-    .planet-ring {
+    .planet {
         position: absolute;
         border-radius: 50%;
     }
@@ -132,27 +127,49 @@
         width: min(27vw, 21rem);
         aspect-ratio: 1;
         overflow: hidden;
+        isolation: isolate;
         border: 3px solid var(--ink);
         background:
-            radial-gradient(circle at 30% 28%, rgba(255, 255, 255, 0.22), transparent 23%),
-            radial-gradient(circle at 72% 68%, rgba(11, 16, 24, 0.23), transparent 21%),
-            var(--coral);
-        box-shadow: 12px 16px 0 rgba(6, 8, 12, 0.48), inset -2rem -2rem 0 rgba(50, 17, 12, 0.12);
+            radial-gradient(circle at 24% 22%, rgba(255, 239, 192, 0.38), transparent 18%),
+            radial-gradient(ellipse at 68% 72%, rgba(20, 22, 31, 0.34), transparent 28%),
+            repeating-linear-gradient(7deg, rgba(85, 34, 30, 0.18) 0 4px, rgba(227, 120, 75, 0.07) 4px 12px),
+            linear-gradient(145deg, #dd7950 0%, #9d463a 48%, #502c39 100%);
+        box-shadow:
+            12px 16px 0 rgba(6, 8, 12, 0.48),
+            inset 1.3rem 1.1rem 2.3rem rgba(255, 218, 154, 0.13),
+            inset -2.8rem -2.5rem 2.8rem rgba(31, 17, 25, 0.38);
     }
 
-    .planet-ring {
-        z-index: -1;
-        top: 24%;
-        left: -1%;
-        width: min(34vw, 28rem);
-        height: min(14vw, 11rem);
-        border: 3px solid var(--gold);
-        transform: rotate(-18deg);
-        box-shadow: 0 0 2rem rgba(216, 165, 47, 0.15);
+    .planet::before {
+        content: '';
+        position: absolute;
+        z-index: 0;
+        inset: -8%;
+        border-radius: inherit;
+        background:
+            radial-gradient(ellipse at 18% 44%, rgba(54, 27, 31, 0.54) 0 4%, transparent 4.8%),
+            radial-gradient(ellipse at 72% 28%, rgba(255, 177, 105, 0.25) 0 6%, transparent 7%),
+            radial-gradient(ellipse at 58% 72%, rgba(54, 27, 31, 0.46) 0 8%, transparent 9%),
+            radial-gradient(ellipse at 37% 63%, rgba(236, 139, 75, 0.24) 0 3%, transparent 4%),
+            repeating-radial-gradient(ellipse at 48% 52%, transparent 0 8%, rgba(47, 24, 30, 0.16) 9% 10%, transparent 11% 16%);
+        opacity: 0.86;
+        transform: rotate(-11deg) scale(1.08);
+    }
+
+    .planet::after {
+        content: '';
+        position: absolute;
+        z-index: 3;
+        inset: 0;
+        border-radius: inherit;
+        background: linear-gradient(105deg, rgba(255, 255, 255, 0.14), transparent 34%, rgba(13, 18, 27, 0.28) 78%);
+        box-shadow: inset 0 0 0 1px rgba(255, 226, 170, 0.12);
+        pointer-events: none;
     }
 
     .planet-line {
         position: absolute;
+        z-index: 2;
         right: -10%;
         left: -10%;
         height: 13%;
@@ -163,17 +180,6 @@
 
     .planet-line-one { top: 34%; }
     .planet-line-two { top: 57%; transform: rotate(7deg); }
-
-    .star-doodle {
-        position: absolute;
-        color: var(--gold);
-        font-size: clamp(1.5rem, 4vw, 3rem);
-        text-shadow: 3px 3px 0 var(--ink);
-    }
-
-    .star-one { top: 11%; right: 8%; }
-    .star-two { right: 2%; bottom: 21%; color: var(--mint); font-size: 1.65rem; }
-    .star-three { bottom: 5%; left: 7%; color: var(--cream); }
 
     .hero-sticker {
         display: grid;
@@ -222,7 +228,6 @@
         .hero { grid-template-columns: 1fr; padding-top: 10rem; }
         .hero-art { position: absolute; z-index: -1; right: 0; bottom: 6rem; width: 50%; min-height: 25rem; opacity: 0.38; }
         .planet { width: 15rem; }
-        .planet-ring { width: 20rem; height: 8rem; }
         .hero-sticker { display: none; }
     }
 

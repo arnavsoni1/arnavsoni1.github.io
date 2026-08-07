@@ -39,8 +39,6 @@
             {/each}
         </div>
 
-        <span class="footer-star star-doodle star-a" aria-hidden="true">✦</span>
-        <span class="footer-star star-doodle star-b" aria-hidden="true">✷</span>
     </div>
 
     <div class="footer-line">
@@ -76,6 +74,10 @@
     .contact-copy {
         position: relative;
         z-index: 2;
+    }
+
+    .contact-copy .section-label {
+        color: #26302d;
     }
 
     .contact-copy h2 {
@@ -152,15 +154,6 @@
         font-size: 1.4rem;
         font-style: normal;
     }
-
-    .footer-star {
-        position: absolute;
-        color: var(--coral);
-        font-size: 3rem;
-    }
-
-    .star-a { top: 2rem; right: 45%; }
-    .star-b { right: 2rem; bottom: 1.2rem; color: var(--mint); font-size: 2rem; }
 
     .footer-line {
         display: grid;

@@ -15,7 +15,6 @@
 <header class="site-header">
     <nav aria-label="Primary navigation">
         <a class="brand" href="#home" aria-label="Arnav Soni, back to top" onclick={closeMenu}>
-            <span class="brand-star" aria-hidden="true">✦</span>
             <span><strong>Arnav Soni</strong><small>Systems &amp; software</small></span>
         </a>
 
@@ -67,22 +66,9 @@
 
     .brand {
         display: inline-flex;
-        gap: 0.8rem;
         align-items: center;
         color: var(--cream);
         text-decoration: none;
-    }
-
-    .brand-star {
-        display: grid;
-        width: 2.55rem;
-        aspect-ratio: 1;
-        place-items: center;
-        border-radius: 50%;
-        background: var(--gold);
-        box-shadow: inset 0 0 0 2px var(--ink), 0 0.4rem 1.2rem rgba(216, 165, 47, 0.25);
-        color: var(--ink);
-        font-size: 1.25rem;
     }
 
     .brand > span:last-child {
@@ -115,9 +101,11 @@
         padding: 0.72rem 0.9rem;
         border-radius: 999px;
         color: var(--paper-muted);
-        font-size: 0.78rem;
-        font-weight: 700;
-        letter-spacing: 0.06em;
+        font-family: var(--display);
+        font-size: 0.82rem;
+        font-weight: 400;
+        letter-spacing: 0.035em;
+        line-height: 1;
         text-decoration: none;
         text-transform: uppercase;
         transition: background 180ms ease, color 180ms ease, transform 180ms ease;

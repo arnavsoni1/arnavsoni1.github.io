@@ -25,23 +25,6 @@
         </div>
     </div>
 
-    <div class="principles">
-        <article data-reveal>
-            <span>✦</span>
-            <h3>Follow the question</h3>
-            <p>Keep digging until the answer is concrete enough to test.</p>
-        </article>
-        <article data-reveal>
-            <span>⌁</span>
-            <h3>Build the proof</h3>
-            <p>Turn theory into something observable, measurable, and real.</p>
-        </article>
-        <article data-reveal>
-            <span>◎</span>
-            <h3>Share the clarity</h3>
-            <p>Explain complicated systems without hiding behind complicated language.</p>
-        </article>
-    </div>
 </section>
 
 <style>
@@ -132,45 +115,7 @@
         transform: rotate(-2deg);
     }
 
-    .principles {
-        display: grid;
-        grid-template-columns: repeat(3, 1fr);
-        gap: 1.2rem;
-        margin-top: 6rem;
-    }
-
-    .principles article {
-        min-height: 17rem;
-        padding: 2rem;
-        border: 2px solid rgba(244, 231, 197, 0.24);
-        border-radius: 2.2rem 0.8rem 2.2rem 0.8rem;
-        background: rgba(17, 25, 38, 0.78);
-        box-shadow: inset 0 1px rgba(255, 255, 255, 0.05);
-        backdrop-filter: blur(10px);
-    }
-
-    .principles article:nth-child(2) { transform: translateY(1.8rem) rotate(1deg); }
-    .principles article:nth-child(3) { transform: rotate(-1deg); }
-
-    .principles span {
-        color: var(--mint);
-        font-size: 2.2rem;
-    }
-
-    .principles h3 {
-        margin: 2rem 0 0.8rem;
-        color: var(--cream);
-        font-family: var(--display);
-        font-size: 1.4rem;
-        line-height: 1.1;
-    }
-
-    .principles p { color: var(--paper-muted); line-height: 1.6; }
-
     @media (max-width: 800px) {
         .about-layout { grid-template-columns: 1fr; }
-        .principles { grid-template-columns: 1fr; }
-        .principles article { min-height: auto; }
-        .principles article:nth-child(2), .principles article:nth-child(3) { transform: none; }
     }
 </style>

@@ -1,7 +1,7 @@
 <script>
     import droopy from '../../assets/characters/droopy-astronaut.webp';
     import scooby from '../../assets/characters/scooby-astronaut.webp';
-    import rubberhoseAstronaut from '../../assets/characters/rubberhose-astronaut.webp';
+    import spike from '../../assets/characters/spike-astronaut.webp';
 </script>
 
 <section class="projects page-section" id="projects">
@@ -22,8 +22,6 @@
                 <div class="exhibit-glass">
                     <span class="exhibit-orbit orbit-wide"></span>
                     <span class="exhibit-orbit orbit-small"></span>
-                    <span class="exhibit-star star-doodle">✦</span>
-                    <span class="exhibit-star star-doodle star-lower">✷</span>
                 </div>
                 <div class="exhibit-base"></div>
             </div>
@@ -34,8 +32,6 @@
                 <div class="exhibit-glass glass-coral">
                     <span class="exhibit-orbit orbit-wide"></span>
                     <span class="exhibit-orbit orbit-small"></span>
-                    <span class="exhibit-star star-doodle">✦</span>
-                    <span class="exhibit-star star-doodle star-lower">✷</span>
                 </div>
                 <div class="exhibit-base"></div>
             </div>
@@ -45,15 +41,13 @@
         </article>
 
         <article class="exhibit-stage character-left" data-reveal>
-            <div class="character-wrap alien-character" data-parallax="4">
-                <img class="character-float" src={rubberhoseAstronaut} alt="A lanky vintage cartoon alien astronaut holding a green energy baton and looking at an empty exhibit" />
+            <div class="character-wrap" data-parallax="4">
+                <img class="character-float" src={spike} alt="Spike the bulldog from Tom and Jerry in an astronaut suit holding a green lightsaber and looking at an empty exhibit" />
             </div>
             <div class="exhibit-case" aria-label="Empty project exhibit">
                 <div class="exhibit-glass glass-mint">
                     <span class="exhibit-orbit orbit-wide"></span>
                     <span class="exhibit-orbit orbit-small"></span>
-                    <span class="exhibit-star star-doodle">✦</span>
-                    <span class="exhibit-star star-doodle star-lower">✷</span>
                 </div>
                 <div class="exhibit-base"></div>
             </div>
@@ -125,8 +119,6 @@
         object-position: bottom center;
     }
 
-    .alien-character { height: 37rem; }
-
     .exhibit-case {
         position: relative;
         z-index: 2;
@@ -197,23 +189,6 @@
         border-style: dotted;
     }
 
-    .exhibit-star {
-        position: absolute;
-        top: 18%;
-        right: 16%;
-        color: var(--gold);
-        font-size: 1.6rem;
-    }
-
-    .star-lower {
-        top: auto;
-        right: auto;
-        bottom: 16%;
-        left: 14%;
-        color: var(--mint);
-        font-size: 1.15rem;
-    }
-
     .exhibit-base {
         height: 3.5rem;
         margin: 0 5%;
@@ -235,7 +210,6 @@
         .character-right .character-wrap { order: 1; justify-self: end; }
         .character-wrap { position: absolute; z-index: 4; bottom: -1rem; left: -2rem; width: 15rem; height: 27rem; }
         .character-right .character-wrap { right: -2rem; left: auto; }
-        .alien-character { height: 29rem; }
         .exhibit-case { align-self: center; margin: 0 1.5rem; }
     }
 
@@ -244,7 +218,6 @@
         .exhibit-glass { min-height: 25rem; }
         .character-wrap { bottom: -0.5rem; left: -3.5rem; width: 13rem; height: 23rem; }
         .character-right .character-wrap { right: -3.5rem; left: auto; }
-        .alien-character { height: 25rem; }
         .exhibit-case { margin: 0; padding: 0.7rem 0.7rem 0; }
     }
 </style>
