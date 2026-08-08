@@ -59,6 +59,10 @@ body {
     line-height: 1.55;
 }
 
+body.explore-active {
+    overflow: hidden;
+}
+
 body::before,
 body::after {
     position: fixed;
@@ -138,6 +142,21 @@ canvas {
     position: relative;
     z-index: 1;
     overflow: clip;
+    opacity: 1;
+    transition: opacity 240ms ease;
+}
+
+body.explore-active .site-shell {
+    opacity: 0;
+    pointer-events: none;
+}
+
+body.explore-active .site-shell.explore-returning {
+    opacity: 1;
+}
+
+body.explore-active .falcon-canvas {
+    opacity: 1;
 }
 
 .skip-link {
@@ -158,6 +177,11 @@ canvas {
 
 .skip-link:focus {
     transform: translateY(0);
+}
+
+.skip-hidden {
+    visibility: hidden;
+    pointer-events: none;
 }
 
 .page-section {
@@ -354,5 +378,9 @@ canvas {
         animation-duration: 0.01ms !important;
         animation-iteration-count: 1 !important;
         transition-duration: 0.01ms !important;
+    }
+
+    .site-shell {
+        transition: none;
     }
 }

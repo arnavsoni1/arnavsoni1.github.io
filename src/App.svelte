@@ -6,6 +6,7 @@
     import { ScrollTrigger } from 'gsap/ScrollTrigger';
     import FalconScene from './lib/components/FalconScene.svelte';
     import Navigation from './lib/components/Navigation.svelte';
+    import ExploreMode from './lib/components/ExploreMode.svelte';
     import Hero from './lib/components/Hero.svelte';
     import About from './lib/components/About.svelte';
     import Experience from './lib/components/Experience.svelte';
@@ -13,11 +14,55 @@
     import Projects from './lib/components/Projects.svelte';
     import Footer from './lib/components/Footer.svelte';
 
+    let falconScene;
+    let lenis;
+    let exploreMounted = false;
+    let exploreActive = false;
+    let exploreReady = false;
+
+    function handleExploreViewChange(insideFalcon) {
+        exploreReady = insideFalcon;
+    }
+
+    function enterExplore() {
+        if (exploreMounted) return;
+        exploreMounted = true;
+        exploreActive = true;
+        exploreReady = false;
+        document.body.classList.add('explore-active');
+        lenis?.stop();
+        falconScene?.setExploreProgress(0);
+        falconScene?.setExploreMode(true);
+    }
+
+    function exitExplore() {
+        if (!exploreMounted || !exploreActive) return;
+        exploreActive = false;
+        falconScene?.setExploreMode(false);
+    }
+
+    function finishExploreExit() {
+        if (exploreActive) return;
+        exploreMounted = false;
+        exploreReady = false;
+        document.body.classList.remove('explore-active');
+        lenis?.start();
+        ScrollTrigger.refresh();
+    }
+
+    function toggleExplore() {
+        if (exploreMounted) {
+            exitExplore();
+        } else {
+            enterExplore();
+        }
+    }
+
     onMount(() => {
         gsap.registerPlugin(ScrollTrigger);
 
         const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        const lenis = new Lenis({
+        lenis = new Lenis({
             duration: reduceMotion ? 0 : 1.15,
             smoothWheel: !reduceMotion,
             wheelMultiplier: 0.9,
@@ -29,17 +74,15 @@
         gsap.ticker.lagSmoothing(0);
         lenis.on('scroll', ScrollTrigger.update);
 
-        const anchorCleanups = [];
-        document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
-            const handleAnchor = (event) => {
-                const target = document.querySelector(anchor.getAttribute('href'));
-                if (!target) return;
-                event.preventDefault();
-                lenis.scrollTo(target, { offset: -72, duration: reduceMotion ? 0 : 1.1 });
-            };
-            anchor.addEventListener('click', handleAnchor);
-            anchorCleanups.push(() => anchor.removeEventListener('click', handleAnchor));
-        });
+        const handleAnchor = (event) => {
+            const anchor = event.target.closest?.('a[href^="#"]');
+            if (!anchor || exploreMounted) return;
+            const target = document.querySelector(anchor.getAttribute('href'));
+            if (!target) return;
+            event.preventDefault();
+            lenis.scrollTo(target, { offset: -72, duration: reduceMotion ? 0 : 1.1 });
+        };
+        document.addEventListener('click', handleAnchor);
 
         const gsapContext = gsap.context(() => {
             if (reduceMotion) return;
@@ -105,11 +148,13 @@
         ScrollTrigger.refresh();
 
         return () => {
-            anchorCleanups.forEach((cleanup) => cleanup());
+            document.removeEventListener('click', handleAnchor);
             ambientAnimations.forEach((animation) => animation.cancel?.());
             gsapContext.revert();
             gsap.ticker.remove(lenisTick);
             lenis.destroy();
+            lenis = undefined;
+            document.body.classList.remove('explore-active');
         };
     });
 </script>
@@ -123,11 +168,26 @@
     <meta name="theme-color" content="#0b1018" />
 </svelte:head>
 
-<a class="skip-link" href="#main-content">Skip to content</a>
-<FalconScene />
-<Navigation />
+<a
+    class:skip-hidden={exploreMounted}
+    class="skip-link"
+    href="#main-content"
+    aria-hidden={exploreMounted}
+    tabindex={exploreMounted ? -1 : undefined}
+>Skip to content</a>
+<FalconScene bind:this={falconScene} onExploreViewChange={handleExploreViewChange} />
+<Navigation
+    exploreMode={exploreMounted}
+    exploreClosing={exploreMounted && !exploreActive}
+    onToggleExplore={toggleExplore}
+/>
 
-<div class="site-shell">
+<div
+    class:explore-returning={exploreMounted && !exploreActive}
+    class="site-shell"
+    aria-hidden={exploreMounted}
+    inert={exploreMounted}
+>
     <main id="main-content">
         <Hero />
         <About />
@@ -137,3 +197,13 @@
     </main>
     <Footer />
 </div>
+
+{#if exploreMounted}
+    <ExploreMode
+        active={exploreActive}
+        ready={exploreReady}
+        onExit={exitExplore}
+        onClosed={finishExploreExit}
+        onProgress={(value) => falconScene?.setExploreProgress(value)}
+    />
+{/if}

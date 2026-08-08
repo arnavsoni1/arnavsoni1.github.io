@@ -4,10 +4,39 @@
     import { gsap } from 'gsap';
     import { ScrollTrigger } from 'gsap/ScrollTrigger';
 
+    export let onExploreViewChange = () => {};
+
     let canvas;
+    let updateExploreMode = (enabled) => onExploreViewChange(Boolean(enabled));
+    let updateExploreProgress = () => {};
 
     const FORWARD = new THREE.Vector3(1, 0, 0);
     const WORLD_TOP = new THREE.Vector3(0, 0, 1);
+    const EXPLORE_UP = new THREE.Vector3(0, 1, 0);
+    const EXPLORE_ROUTE_RADIUS = 22;
+
+    export function setExploreMode(enabled) {
+        updateExploreMode(Boolean(enabled));
+    }
+
+    export function setExploreProgress(progress) {
+        updateExploreProgress(progress);
+    }
+
+    function sampleExploreRoute(progress, position, tangent) {
+        const angle = progress * Math.PI * 2;
+        position.set(
+            Math.cos(angle) * EXPLORE_ROUTE_RADIUS,
+            Math.sin(angle * 2) * 1.55,
+            Math.sin(angle) * EXPLORE_ROUTE_RADIUS
+        );
+        tangent.set(
+            -Math.sin(angle) * EXPLORE_ROUTE_RADIUS,
+            Math.cos(angle * 2) * 3.1,
+            Math.cos(angle) * EXPLORE_ROUTE_RADIUS
+        ).normalize();
+        return angle;
+    }
 
     function seededRandom(seed) {
         let state = seed % 2147483647;
@@ -728,11 +757,169 @@
         return { rockyGroup, rockyPlanet, gasGroup, gasPlanet };
     }
 
+    function makeDeepStars() {
+        const count = 1800;
+        const positions = new Float32Array(count * 3);
+        const colors = new Float32Array(count * 3);
+        const palette = [new THREE.Color(0xf8edcf), new THREE.Color(0x7df5a0), new THREE.Color(0x69c4ca), new THREE.Color(0xdda93b)];
+        const random = seededRandom(2187);
+
+        for (let index = 0; index < count; index += 1) {
+            const offset = index * 3;
+            positions[offset] = (random() - 0.5) * 120;
+            positions[offset + 1] = (random() - 0.5) * 72;
+            positions[offset + 2] = (random() - 0.5) * 120;
+            const color = palette[index % palette.length];
+            colors[offset] = color.r;
+            colors[offset + 1] = color.g;
+            colors[offset + 2] = color.b;
+        }
+
+        const geometry = new THREE.BufferGeometry();
+        geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+        geometry.setAttribute('color', new THREE.BufferAttribute(colors, 3));
+        return new THREE.Points(
+            geometry,
+            new THREE.PointsMaterial({
+                size: 0.075,
+                vertexColors: true,
+                transparent: true,
+                opacity: 0.88,
+                sizeAttenuation: true
+            })
+        );
+    }
+
+    function makeCartoonPlanet({ color, accent, radius = 2.8, ring = false, seed = 1 }) {
+        const group = new THREE.Group();
+        const sphereGeometry = new THREE.IcosahedronGeometry(radius, 3);
+        const outline = new THREE.Mesh(
+            sphereGeometry,
+            new THREE.MeshBasicMaterial({ color: 0x090c12, side: THREE.BackSide })
+        );
+        outline.scale.setScalar(1.045);
+        group.add(outline);
+
+        const surface = new THREE.Mesh(
+            sphereGeometry,
+            new THREE.MeshStandardMaterial({
+                color,
+                emissive: new THREE.Color(color).multiplyScalar(0.06),
+                roughness: 0.82,
+                metalness: 0.03,
+                flatShading: true
+            })
+        );
+        surface.castShadow = true;
+        surface.receiveShadow = true;
+        group.add(surface);
+
+        const latitudeMaterial = new THREE.MeshBasicMaterial({ color: accent, transparent: true, opacity: 0.72 });
+        [-0.78, 0.14, 0.92].forEach((height, index) => {
+            const latitudeRadius = Math.sqrt(Math.max(0.1, radius * radius - height * height));
+            const latitude = new THREE.Mesh(
+                new THREE.TorusGeometry(latitudeRadius, index === 1 ? 0.075 : 0.045, 7, 72),
+                latitudeMaterial
+            );
+            latitude.rotation.x = Math.PI / 2;
+            latitude.position.y = height;
+            latitude.rotation.z = (index - 1) * 0.08;
+            group.add(latitude);
+        });
+
+        const random = seededRandom(seed);
+        for (let index = 0; index < 7; index += 1) {
+            const patch = new THREE.Mesh(
+                new THREE.SphereGeometry(0.18 + random() * 0.24, 12, 8),
+                new THREE.MeshStandardMaterial({ color: index % 3 === 0 ? accent : 0x2c3132, roughness: 0.9 })
+            );
+            const phi = random() * Math.PI * 2;
+            const theta = 0.35 + random() * (Math.PI - 0.7);
+            patch.position.setFromSphericalCoords(radius * 0.99, theta, phi);
+            patch.scale.z = 0.38;
+            patch.lookAt(0, 0, 0);
+            group.add(patch);
+        }
+
+        if (ring) {
+            const planetRing = new THREE.Mesh(
+                new THREE.RingGeometry(radius * 1.25, radius * 1.82, 96, 8),
+                new THREE.MeshBasicMaterial({
+                    color: accent,
+                    transparent: true,
+                    opacity: 0.38,
+                    side: THREE.DoubleSide,
+                    depthWrite: false
+                })
+            );
+            planetRing.rotation.x = 1.18;
+            planetRing.rotation.y = 0.2;
+            group.add(planetRing);
+
+            const ringOutline = new THREE.Mesh(
+                new THREE.TorusGeometry(radius * 1.58, 0.055, 8, 96),
+                new THREE.MeshBasicMaterial({ color: 0x090c12, transparent: true, opacity: 0.7 })
+            );
+            ringOutline.rotation.x = 1.18;
+            ringOutline.rotation.y = 0.2;
+            group.add(ringOutline);
+        }
+
+        group.userData.surface = surface;
+        return group;
+    }
+
+    function makeExploreWorld() {
+        const world = new THREE.Group();
+        world.name = 'Circular Explore Route';
+        const deepStars = makeDeepStars();
+        world.add(deepStars);
+
+        const configs = [
+            { color: 0xdda93b, accent: 0xd75b42, radius: 3.15, seed: 11 },
+            { color: 0xd75b42, accent: 0xf4e7c5, radius: 2.85, ring: true, seed: 22 },
+            { color: 0x69c4ca, accent: 0x7df5a0, radius: 3.05, seed: 33 },
+            { color: 0x7df5a0, accent: 0xdda93b, radius: 2.9, ring: true, seed: 44 }
+        ];
+        const verticalOffsets = [-0.4, 0.75, -0.75, 0.45];
+        const routePosition = new THREE.Vector3();
+        const routeTangent = new THREE.Vector3();
+        const routeRadial = new THREE.Vector3();
+
+        const planets = configs.map((config, index) => {
+            const progress = index / configs.length;
+            sampleExploreRoute(progress, routePosition, routeTangent);
+            routeRadial.set(routePosition.x, 0, routePosition.z).normalize();
+            const planet = makeCartoonPlanet(config);
+            const position = routePosition.clone()
+                .addScaledVector(routeTangent, 9)
+                .addScaledVector(routeRadial, 7.5)
+                .addScaledVector(EXPLORE_UP, verticalOffsets[index]);
+            planet.position.copy(position);
+            planet.rotation.z = index % 2 ? 0.12 : -0.1;
+            planet.userData.routePosition = position.clone();
+            planet.userData.rotationRate = 0.018 + index * 0.004;
+            world.add(planet);
+            return planet;
+        });
+
+        world.visible = false;
+        return { world, planets, deepStars };
+    }
+
     onMount(() => {
         gsap.registerPlugin(ScrollTrigger);
 
-        const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-        const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true, powerPreference: 'high-performance' });
+        const motionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
+        let reduceMotion = motionPreference.matches;
+        let renderer;
+        try {
+            renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true, powerPreference: 'high-performance' });
+        } catch (error) {
+            canvas.dataset.sceneState = 'unavailable';
+            console.warn('The decorative 3D scene could not start. The portfolio remains available.', error);
+            return () => {};
+        }
         renderer.outputColorSpace = THREE.SRGBColorSpace;
         renderer.toneMapping = THREE.ACESFilmicToneMapping;
         renderer.toneMappingExposure = 1.14;
@@ -743,19 +930,25 @@
 
         const anisotropy = Math.min(8, renderer.capabilities.getMaxAnisotropy());
         const scene = new THREE.Scene();
-        const camera = new THREE.PerspectiveCamera(38, window.innerWidth / window.innerHeight, 0.1, 100);
+        const camera = new THREE.PerspectiveCamera(38, window.innerWidth / window.innerHeight, 0.1, 160);
         camera.position.set(0, 0, 11);
 
+        const normalWorld = new THREE.Group();
+        normalWorld.name = 'Exterior Portfolio Scene';
         const stars = makeStars();
-        scene.add(stars);
+        normalWorld.add(stars);
 
         const { rockyGroup, rockyPlanet, gasGroup, gasPlanet } = makePlanetSystem(anisotropy);
-        scene.add(rockyGroup, gasGroup);
+        normalWorld.add(rockyGroup, gasGroup);
 
         const flightRig = new THREE.Group();
         const falcon = makeFalcon(anisotropy);
         flightRig.add(falcon);
-        scene.add(flightRig);
+        normalWorld.add(flightRig);
+        scene.add(normalWorld);
+
+        const { world: exploreWorld, planets: explorePlanets, deepStars } = makeExploreWorld();
+        scene.add(exploreWorld);
 
         scene.add(new THREE.HemisphereLight(0xf7e7bd, 0x111b2a, 2.35));
         const keyLight = new THREE.DirectionalLight(0xffd57b, 5.2);
@@ -777,7 +970,7 @@
         scene.add(fillLight);
 
         function makeFlightPath() {
-            const verticalHalf = Math.tan(THREE.MathUtils.degToRad(camera.fov * 0.5)) * camera.position.z;
+            const verticalHalf = Math.tan(THREE.MathUtils.degToRad(38 * 0.5)) * 11;
             const horizontalHalf = verticalHalf * camera.aspect;
             const extent = THREE.MathUtils.clamp(horizontalHalf * 1.06, 3.2, 5.2);
             return new THREE.CatmullRomCurve3(
@@ -804,11 +997,27 @@
         const orientationMatrix = new THREE.Matrix4();
         const bankQuaternion = new THREE.Quaternion();
         const targetQuaternion = new THREE.Quaternion();
+        const launchTarget = new THREE.Vector3(0, -0.3, 7.6);
+        const exploreCameraPosition = new THREE.Vector3();
+        const exploreCameraTangent = new THREE.Vector3();
+        const exploreLookTarget = new THREE.Vector3();
+        const reducedPlanetPosition = new THREE.Vector3(4.6, -0.7, -6.8);
+        const exploreState = { mix: 0, progress: 0 };
+        let exploreRequested = false;
+        let modeTween;
+        let baseFalconScale = 0.54;
+        let previousCockpitView = false;
 
         let flightTween;
-        if (reduceMotion) {
-            flight.progress = 0.42;
-        } else {
+
+        function configureNormalFlight() {
+            flightTween?.kill();
+            flightTween = undefined;
+            if (reduceMotion) {
+                flight.progress = 0.42;
+                return;
+            }
+
             flightTween = gsap.to(flight, {
                 progress: 1,
                 ease: 'none',
@@ -821,10 +1030,43 @@
             });
         }
 
+        updateExploreMode = (enabled) => {
+            exploreRequested = enabled;
+            modeTween?.kill();
+            if (reduceMotion) {
+                exploreState.mix = enabled ? 1 : 0;
+                return;
+            }
+            modeTween = gsap.to(exploreState, {
+                mix: enabled ? 1 : 0,
+                duration: enabled ? 0.86 : 0.68,
+                ease: 'power2.inOut'
+            });
+        };
+
+        updateExploreProgress = (value) => {
+            const numericProgress = Number(value);
+            exploreState.progress = Number.isFinite(numericProgress)
+                ? THREE.MathUtils.clamp(numericProgress, 0, 1)
+                : 0;
+        };
+
+        const handleMotionPreference = () => {
+            reduceMotion = motionPreference.matches;
+            modeTween?.kill();
+            exploreState.mix = exploreRequested ? 1 : 0;
+            configureNormalFlight();
+        };
+
+        configureNormalFlight();
+        motionPreference.addEventListener('change', handleMotionPreference);
+
         const clock = new THREE.Clock();
         let animationFrame;
+        let rendering = true;
 
         function render() {
+            if (!rendering) return;
             const elapsed = clock.getElapsedTime();
             const progress = THREE.MathUtils.clamp(flight.progress, 0, 1);
             const sampleOffset = 0.018;
@@ -841,8 +1083,49 @@
             bankQuaternion.setFromAxisAngle(FORWARD, bank);
             targetQuaternion.multiply(bankQuaternion);
 
-            flightRig.position.copy(point);
             flightRig.quaternion.copy(targetQuaternion);
+
+            const cockpitView = exploreState.mix >= 0.58;
+            if (cockpitView !== previousCockpitView) {
+                camera.fov = cockpitView ? 52 : 38;
+                camera.updateProjectionMatrix();
+                previousCockpitView = cockpitView;
+                onExploreViewChange(cockpitView);
+            }
+
+            normalWorld.visible = !cockpitView;
+            exploreWorld.visible = cockpitView;
+
+            if (cockpitView) {
+                const exploreProgress = THREE.MathUtils.clamp(exploreState.progress, 0, 1);
+                if (reduceMotion) {
+                    camera.position.set(0, 0, 11);
+                    camera.up.copy(EXPLORE_UP);
+                    camera.lookAt(0, 0, -5.5);
+                    const selectedPlanet = Math.round(exploreProgress * 4) % explorePlanets.length;
+                    explorePlanets.forEach((planet, index) => {
+                        planet.visible = index === selectedPlanet;
+                        if (planet.visible) planet.position.copy(reducedPlanetPosition);
+                    });
+                } else {
+                    sampleExploreRoute(exploreProgress, exploreCameraPosition, exploreCameraTangent);
+                    exploreLookTarget.copy(exploreCameraPosition).addScaledVector(exploreCameraTangent, 8);
+                    camera.position.copy(exploreCameraPosition);
+                    camera.up.copy(EXPLORE_UP);
+                    camera.lookAt(exploreLookTarget);
+                    explorePlanets.forEach((planet) => {
+                        planet.visible = true;
+                        planet.position.copy(planet.userData.routePosition);
+                    });
+                }
+            } else {
+                const launchProgress = THREE.MathUtils.smoothstep(exploreState.mix, 0, 0.58);
+                flightRig.position.lerpVectors(point, launchTarget, launchProgress);
+                falcon.scale.setScalar(baseFalconScale * (1 + launchProgress * 3.8));
+                camera.position.set(0, 0, 11);
+                camera.up.set(0, 1, 0);
+                camera.lookAt(0, 0, -0.6);
+            }
 
             const enginePulse = reduceMotion ? 1 : 0.97 + Math.sin(elapsed * 4.2) * 0.025;
             falcon.userData.engineCoreMaterial.emissiveIntensity = 3.35 * enginePulse;
@@ -855,13 +1138,18 @@
                 sprite.scale.x = (index === 1 ? 1.6 : 1.22) * pulse;
             });
 
-            camera.lookAt(0, 0, -0.6);
-            stars.rotation.z = elapsed * 0.0024;
-            stars.position.x = Math.sin(elapsed * 0.05) * 0.16;
-            rockyPlanet.rotation.y = elapsed * 0.022;
-            rockyGroup.rotation.z = -0.08 + Math.sin(elapsed * 0.035) * 0.012;
-            gasPlanet.rotation.y = elapsed * 0.035;
-            gasGroup.rotation.z = 0.05 + Math.sin(elapsed * 0.04) * 0.01;
+            if (!reduceMotion) {
+                stars.rotation.z = elapsed * 0.0024;
+                stars.position.x = Math.sin(elapsed * 0.05) * 0.16;
+                rockyPlanet.rotation.y = elapsed * 0.022;
+                rockyGroup.rotation.z = -0.08 + Math.sin(elapsed * 0.035) * 0.012;
+                gasPlanet.rotation.y = elapsed * 0.035;
+                gasGroup.rotation.z = 0.05 + Math.sin(elapsed * 0.04) * 0.01;
+                deepStars.rotation.y = elapsed * 0.0018;
+                explorePlanets.forEach((planet) => {
+                    planet.userData.surface.rotation.y = elapsed * planet.userData.rotationRate;
+                });
+            }
 
             renderer.render(scene, camera);
             animationFrame = window.requestAnimationFrame(render);
@@ -872,18 +1160,38 @@
             camera.updateProjectionMatrix();
             renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.75));
             renderer.setSize(window.innerWidth, window.innerHeight);
-            falcon.scale.setScalar(window.innerWidth < 640 ? 0.34 : window.innerWidth < 960 ? 0.44 : 0.54);
+            baseFalconScale = window.innerWidth < 640 ? 0.34 : window.innerWidth < 960 ? 0.44 : 0.54;
+            if (exploreState.mix === 0) falcon.scale.setScalar(baseFalconScale);
             path = makeFlightPath();
         }
 
+        function handleVisibility() {
+            if (document.hidden) {
+                rendering = false;
+                window.cancelAnimationFrame(animationFrame);
+                return;
+            }
+            if (!rendering) {
+                rendering = true;
+                render();
+            }
+        }
+
         window.addEventListener('resize', resize);
+        document.addEventListener('visibilitychange', handleVisibility);
         resize();
         render();
 
         return () => {
             window.removeEventListener('resize', resize);
+            document.removeEventListener('visibilitychange', handleVisibility);
+            motionPreference.removeEventListener('change', handleMotionPreference);
+            rendering = false;
             window.cancelAnimationFrame(animationFrame);
             flightTween?.kill();
+            modeTween?.kill();
+            updateExploreMode = () => {};
+            updateExploreProgress = () => {};
             renderer.dispose();
 
             const disposedTextures = new Set();
