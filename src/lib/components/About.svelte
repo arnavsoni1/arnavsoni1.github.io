@@ -1,26 +1,25 @@
 <section class="about page-section" id="about">
     <div class="section-heading" data-reveal>
         <p class="section-label">About me</p>
-        <h2>Curious by <em>default.</em></h2>
+        <h2>Curious <em>student</em></h2>
     </div>
 
     <div class="about-layout">
         <div class="about-card" data-reveal data-reveal-tilt="-2">
             <span class="about-number">01</span>
             <p>
-                I’m a student engineer drawn to the part of computing where abstractions stop being
-                magic and start becoming memory, threads, instructions, and data movement.
+                I am a Software Engineering student excited about working on compilers, kernels, 
+                drivers and learning about computer architecture, networking infrastructure and everything in between. 
             </p>
             <p>
-                I learn by making things, measuring them, breaking them, and understanding why the
-                machine behaved the way it did.
+                In my free time, you might find me swimming.
             </p>
             <span class="tape" aria-hidden="true"></span>
         </div>
 
         <div class="about-quote" data-reveal>
             <span class="quote-mark">“</span>
-            <blockquote>I like software that makes the machine feel less mysterious.</blockquote>
+            <blockquote>When life gives you lemons... set them aside, make some coffee and get to work.</blockquote>
             <div class="scribble" aria-hidden="true"></div>
         </div>
     </div>
