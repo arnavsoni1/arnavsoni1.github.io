@@ -114,7 +114,7 @@
 </script>
 
 <svelte:head>
-    <title>Arnav Soni — Systems, Speed & Strange Ideas</title>
+    <title>Arnav Soni - Portfolio</title>
     <meta
         name="description"
         content="Arnav Soni is a systems programmer exploring low-level software, GPU computing, and ambitious technical ideas."
