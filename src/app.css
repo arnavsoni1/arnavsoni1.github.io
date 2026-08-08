@@ -330,6 +330,9 @@ canvas {
 .fallback-section { padding: 7rem 0; }
 .fallback-section h2 { margin: 0.7rem 0 2rem; font-family: var(--display); font-size: clamp(3rem, 7vw, 6rem); }
 .fallback-panel, .fallback-card { padding: 2rem; border: 3px solid var(--ink); border-radius: 2rem 0.8rem; background: var(--cream); box-shadow: 9px 10px 0 var(--coral), 12px 13px 0 var(--ink); color: var(--ink); }
+.fallback-panel h3 { margin: 0.8rem 0 0.3rem; font-family: var(--display); font-size: clamp(1.8rem, 4vw, 3.2rem); line-height: 1; }
+.fallback-panel > strong { color: #4b4438; }
+.fallback-panel > strong + p { margin-top: 1.2rem; }
 .fallback-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
 .fallback-card strong { display: block; margin: 1rem 0 0.6rem; font-family: var(--display); font-size: 1.5rem; }
 .fallback-contact { display: flex; justify-content: space-between; align-items: center; }

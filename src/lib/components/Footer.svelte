@@ -1,4 +1,6 @@
 <script>
+    import rubiksCube from '../../assets/rubiks-cube.webp';
+
     const year = new Date().getFullYear();
     const links = [
         {
@@ -8,8 +10,8 @@
         },
         {
             label: 'Twitter / X',
-            detail: '@arnavsoni1',
-            href: 'https://x.com/arnavsoni1'
+            detail: '@ArnavSoni1701',
+            href: 'https://x.com/ArnavSoni1701'
         },
         {
             label: 'Email',
@@ -21,6 +23,17 @@
 
 <footer id="contact">
     <div class="contact-card" data-reveal>
+        <img
+            class="contact-cube"
+            src={rubiksCube}
+            alt=""
+            width="321"
+            height="360"
+            loading="lazy"
+            decoding="async"
+            aria-hidden="true"
+        />
+
         <div class="contact-copy">
             <p class="section-label">Contact me</p>
             <h2>Let’s make something <em>interesting.</em></h2>
@@ -76,6 +89,19 @@
         z-index: 2;
     }
 
+    .contact-cube {
+        position: absolute;
+        z-index: 3;
+        top: clamp(0.8rem, 2vw, 1.4rem);
+        right: clamp(0.8rem, 2vw, 1.4rem);
+        width: clamp(4.5rem, 7vw, 6.25rem);
+        height: auto;
+        transform: rotate(8deg);
+        filter: drop-shadow(3px 4px 0 var(--ink));
+        pointer-events: none;
+        user-select: none;
+    }
+
     .contact-copy .section-label {
         color: #26302d;
     }
@@ -107,6 +133,7 @@
         z-index: 2;
         gap: 0.8rem;
         align-content: center;
+        padding-top: 2.75rem;
     }
 
     .contact-links a {
@@ -178,6 +205,9 @@
     @media (max-width: 780px) {
         footer { width: calc(100% - 2rem); }
         .contact-card { grid-template-columns: 1fr; }
+        .contact-copy { padding-top: 3.25rem; }
+        .contact-links { padding-top: 0; }
+        .contact-cube { width: 4.25rem; }
         .footer-line { grid-template-columns: 1fr; gap: 0.6rem; text-align: center; }
     }
 </style>

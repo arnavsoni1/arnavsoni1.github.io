@@ -6,18 +6,18 @@
     import pythonIcon from '../../assets/python.png';
 
     const skills = [
-        { name: 'C', note: 'Memory, pointers, and code close to the machine.', icon: cIcon, color: 'blue' },
-        { name: 'C++', note: 'Performance-minded programs and modern systems tooling.', icon: cppIcon, color: 'gold' },
-        { name: 'Rust', note: 'Strong guarantees for ambitious low-level software.', icon: rustIcon, color: 'coral' },
-        { name: 'CUDA', note: 'Parallel workloads, kernels, and GPU experiments.', icon: cudaIcon, color: 'mint' },
-        { name: 'Python', note: 'Fast prototypes, automation, and scientific workflows.', icon: pythonIcon, color: 'cream' }
+        { name: 'C', note: 'Intermediate', icon: cIcon, color: 'blue' },
+        { name: 'C++', note: 'Advanced, comfortable with smart pointers and concurrency', icon: cppIcon, color: 'gold' },
+        { name: 'Rust', note: 'Intermediate, familiar with ownership and lifetimes', icon: rustIcon, color: 'coral' },
+        { name: 'CUDA', note: 'Beginner, can write kernels', icon: cudaIcon, color: 'mint' },
+        { name: 'Python', note: 'Advanced, comfortable with machine learning frameworks', icon: pythonIcon, color: 'cream' }
     ];
 </script>
 
 <section class="skills page-section" id="skills">
     <div class="section-heading" data-reveal>
         <p class="section-label">What I work with</p>
-        <h2>A toolkit for <em>going deeper.</em></h2>
+        <h2>My <em>toolbox</em></h2>
     </div>
 
     <div class="skill-stack">
