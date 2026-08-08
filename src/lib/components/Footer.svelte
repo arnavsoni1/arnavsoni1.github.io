@@ -56,8 +56,7 @@
 
     <div class="footer-line">
         <a href="#home" class="footer-brand">Arnav Soni</a>
-        <p>Built with curiosity and an unreasonable number of moving parts.</p>
-        <span>© {year}</span>
+        <p>Developer portfolio</p>
     </div>
 </footer>
 
