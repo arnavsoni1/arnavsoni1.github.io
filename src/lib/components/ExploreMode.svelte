@@ -331,7 +331,8 @@
         overflow: hidden;
         background: transparent;
         opacity: 1;
-        transition: opacity 680ms cubic-bezier(0.45, 0, 0.55, 1);
+        /* Keep this exit lifetime aligned with EXPLORE_EXIT_DURATION in FalconScene. */
+        transition: opacity 1450ms cubic-bezier(0.45, 0, 0.55, 1);
     }
 
     .mode-closing {

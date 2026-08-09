@@ -14,6 +14,8 @@
     const WORLD_TOP = new THREE.Vector3(0, 0, 1);
     const EXPLORE_UP = new THREE.Vector3(0, 1, 0);
     const EXPLORE_ROUTE_RADIUS = 22;
+    const EXPLORE_ENTER_DURATION = 1.65;
+    const EXPLORE_EXIT_DURATION = 1.45;
 
     export function setExploreMode(enabled) {
         updateExploreMode(Boolean(enabled));
@@ -1033,14 +1035,30 @@
         updateExploreMode = (enabled) => {
             exploreRequested = enabled;
             modeTween?.kill();
+            modeTween = undefined;
             if (reduceMotion) {
                 exploreState.mix = enabled ? 1 : 0;
                 return;
             }
+
+            const targetMix = enabled ? 1 : 0;
+            const remainingDistance = Math.abs(targetMix - exploreState.mix);
+            if (remainingDistance < 0.001) {
+                exploreState.mix = targetMix;
+                modeTween = undefined;
+                return;
+            }
+
             modeTween = gsap.to(exploreState, {
-                mix: enabled ? 1 : 0,
-                duration: enabled ? 0.86 : 0.68,
-                ease: 'power2.inOut'
+                mix: targetMix,
+                duration: Math.max(
+                    0.18,
+                    (enabled ? EXPLORE_ENTER_DURATION : EXPLORE_EXIT_DURATION) * remainingDistance
+                ),
+                ease: 'sine.inOut',
+                onComplete: () => {
+                    modeTween = undefined;
+                }
             });
         };
 
@@ -1054,6 +1072,7 @@
         const handleMotionPreference = () => {
             reduceMotion = motionPreference.matches;
             modeTween?.kill();
+            modeTween = undefined;
             exploreState.mix = exploreRequested ? 1 : 0;
             configureNormalFlight();
         };
