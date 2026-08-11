@@ -6,18 +6,13 @@
     // Add, remove, or reorder entries here. Leave `link` empty until a project has a page to visit.
     const projects = [
         {
-            title: 'Your project title',
-            description: 'Add a one-line description of what you built and why it matters.',
+            title: 'Cobra',
+            description: 'A rust based proxy to route HTTP and HTTPS requests through Tor',
             link: ''
         },
         {
-            title: 'Another project title',
-            description: 'Keep this to one useful sentence about the problem, result, or interesting technical detail.',
-            link: ''
-        },
-        {
-            title: 'One more project title',
-            description: 'Use this row for another project, experiment, or work in progress.',
+            title: 'Kyber',
+            description: 'A Rust based GPU compiler with a C++ runtime',
             link: ''
         }
     ];
