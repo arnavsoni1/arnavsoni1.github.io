@@ -59,7 +59,8 @@ body {
     line-height: 1.55;
 }
 
-body.explore-active {
+body.explore-active,
+body.hyperdrive-active {
     overflow: hidden;
 }
 

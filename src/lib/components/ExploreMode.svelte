@@ -9,9 +9,11 @@
 
     export let active = true;
     export let ready = false;
+    export let hyperdriveActive = false;
     export let onExit = () => {};
     export let onClosed = () => {};
     export let onProgress = () => {};
+    export let onStartHyperdrive = () => {};
 
     const stops = [
         { label: 'About', kind: 'about' },
@@ -161,7 +163,7 @@
         };
 
         const handleKeydown = (event) => {
-            if (active && event.key === 'Escape') onExit();
+            if (active && !hyperdriveActive && event.key === 'Escape') onExit();
         };
 
         handleMotionPreference();
@@ -191,6 +193,8 @@
     class:mode-ready={ready || reducedMotion}
     class="explore-mode"
     aria-label="Explore portfolio from the Falcon cockpit"
+    aria-hidden={hyperdriveActive}
+    inert={hyperdriveActive}
     ontransitionend={handleModeTransition}
 >
     <div
@@ -311,9 +315,14 @@
                             </a>
                         {/each}
                     </div>
-                    <div class="console-switches" aria-hidden="true">
-                        <span></span><span></span><span></span><span></span>
-                    </div>
+                    <button
+                        class="console-hyperdrive"
+                        type="button"
+                        aria-label="Engage hyperdrive"
+                        title="Hyperdrive"
+                        disabled={hyperdriveActive || !active}
+                        onclick={onStartHyperdrive}
+                    >H</button>
                 </aside>
 
                 <p class="flight-instruction"><span aria-hidden="true">↟</span> Scroll to fly forward</p>
@@ -737,9 +746,38 @@
     .console-links a:hover { transform: translate(-2px, -2px); box-shadow: 5px 6px 0 var(--ink); }
     .console-links b { display: grid; width: 1.7rem; height: 1.7rem; place-items: center; border: 2px solid currentColor; border-radius: 50%; font-family: var(--display); font-size: 0.55rem; }
 
-    .console-switches { display: flex; gap: 0.4rem; }
-    .console-switches span { width: 0.65rem; height: 2rem; border: 2px solid var(--ink); border-radius: 999px; background: linear-gradient(var(--mint) 0 45%, #0d1318 45%); transform: rotate(8deg); }
-    .console-switches span:nth-child(2n) { background: linear-gradient(var(--coral) 0 68%, #0d1318 68%); transform: rotate(-5deg); }
+    .console-hyperdrive {
+        display: grid;
+        width: 2.5rem;
+        height: 2.5rem;
+        place-items: center;
+        padding: 0;
+        border: 1px solid #737c7c;
+        border-radius: 0.3rem;
+        background: #4b5559;
+        box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.1), 0 1px 2px rgba(0, 0, 0, 0.35);
+        color: rgba(244, 231, 197, 0.76);
+        cursor: pointer;
+        font-family: var(--display);
+        font-size: 0.78rem;
+        font-weight: 900;
+        line-height: 1;
+        transition: background 150ms ease, border-color 150ms ease, color 150ms ease, opacity 150ms ease;
+    }
+
+    .console-hyperdrive:hover,
+    .console-hyperdrive:focus-visible {
+        border-color: #899291;
+        background: #566064;
+        color: var(--cream);
+    }
+
+    .console-hyperdrive:active {
+        background: #3e484c;
+        box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.38);
+    }
+
+    .console-hyperdrive:disabled { cursor: wait; opacity: 0.42; }
 
     .flight-instruction {
         position: absolute;
@@ -761,8 +799,7 @@
 
     @media (max-width: 900px) {
         .exhibit-panel { width: min(44rem, calc(100% - 5rem)); }
-        .cockpit-console { grid-template-columns: 1fr; gap: 0.65rem; min-height: 9.7rem; padding: 0.75rem 1rem; }
-        .console-switches { display: none; }
+        .cockpit-console { grid-template-columns: minmax(0, 1fr) auto; gap: 0.65rem; min-height: 9.7rem; padding: 0.75rem 1rem; }
         .cockpit-map { bottom: 10.7rem; }
         .flight-instruction { bottom: 11rem; }
         .exhibit-deck { bottom: clamp(14rem, 25vh, 16rem); }
@@ -795,6 +832,7 @@
         .cockpit-console { min-height: 9.35rem; }
         .console-links { grid-template-columns: repeat(2, 1fr); }
         .console-links a { min-height: 3rem; }
+        .console-hyperdrive { align-self: end; margin-bottom: 0.2rem; }
         .flight-instruction { display: none; }
         .frame-left, .frame-right { width: 3.5rem; opacity: 0.78; }
     }
@@ -822,5 +860,6 @@
         .explore-stage > * { opacity: 1; }
         .exhibit-panel { transition: opacity 80ms linear; will-change: auto; }
         .route-stops i { transition: none; }
+        .console-hyperdrive { transition: none; }
     }
 </style>

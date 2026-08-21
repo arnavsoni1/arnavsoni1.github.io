@@ -9,6 +9,7 @@
     let canvas;
     let updateExploreMode = (enabled) => onExploreViewChange(Boolean(enabled));
     let updateExploreProgress = () => {};
+    let updateSuspended = () => {};
 
     const FORWARD = new THREE.Vector3(1, 0, 0);
     const WORLD_TOP = new THREE.Vector3(0, 0, 1);
@@ -23,6 +24,10 @@
 
     export function setExploreProgress(progress) {
         updateExploreProgress(progress);
+    }
+
+    export function setSuspended(suspended) {
+        updateSuspended(Boolean(suspended));
     }
 
     function sampleExploreRoute(progress, position, tangent) {
@@ -1083,9 +1088,10 @@
         const clock = new THREE.Clock();
         let animationFrame;
         let rendering = true;
+        let externallySuspended = false;
 
         function render() {
-            if (!rendering) return;
+            if (!rendering || externallySuspended) return;
             const elapsed = clock.getElapsedTime();
             const progress = THREE.MathUtils.clamp(flight.progress, 0, 1);
             const sampleOffset = 0.018;
@@ -1174,6 +1180,16 @@
             animationFrame = window.requestAnimationFrame(render);
         }
 
+        updateSuspended = (suspended) => {
+            externallySuspended = suspended;
+            if (suspended) {
+                window.cancelAnimationFrame(animationFrame);
+                animationFrame = undefined;
+                return;
+            }
+            if (rendering && !document.hidden && !animationFrame) render();
+        };
+
         function resize() {
             camera.aspect = window.innerWidth / window.innerHeight;
             camera.updateProjectionMatrix();
@@ -1188,11 +1204,12 @@
             if (document.hidden) {
                 rendering = false;
                 window.cancelAnimationFrame(animationFrame);
+                animationFrame = undefined;
                 return;
             }
             if (!rendering) {
                 rendering = true;
-                render();
+                if (!externallySuspended) render();
             }
         }
 
@@ -1211,6 +1228,7 @@
             modeTween?.kill();
             updateExploreMode = () => {};
             updateExploreProgress = () => {};
+            updateSuspended = () => {};
             renderer.dispose();
 
             const disposedTextures = new Set();
