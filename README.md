@@ -35,3 +35,9 @@ The repository root also contains a styled static fallback. If Pages is accident
 - Hero copy: `src/lib/components/Hero.svelte`
 
 The project exhibits are intentionally empty until real work is ready to be added.
+
+## Planet landing
+
+In Explore mode, engage hyperdrive and click or tap the planet to land. The planet is also keyboard accessible with Tab and Enter or Space. The 24-second flight moves from orbit through an atmospheric cloud bank into a gradual surface approach and touchdown. Return to cockpit or Escape exits at any point.
+
+`src/lib/three/planetLanding.js` owns the procedural terrain and camera path. The existing hyperdrive render loop drives the flight, pauses it in hidden tabs, and stops at touchdown. Reduced-motion preferences go directly to the stationary surface view, including when enabled mid-flight. The surface is built on the first planet click and its GPU resources are released when the experience closes.

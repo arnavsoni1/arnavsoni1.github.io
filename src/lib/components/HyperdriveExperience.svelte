@@ -1,6 +1,7 @@
 <script>
     import { onMount } from 'svelte';
     import * as THREE from 'three';
+    import { createPlanetLanding, LANDING_DURATION } from '../three/planetLanding.js';
 
     export let active = true;
     export let onExit = () => {};
@@ -15,11 +16,16 @@
     let reducedMotion = false;
     let sceneUnavailable = false;
     let pauseForExit = () => {};
+    let beginLanding = () => {};
 
     $: if (!active) pauseForExit();
 
     function requestExit() {
         if (active) onExit();
+    }
+
+    function requestLanding() {
+        if (active && phase === 'arrival' && !sceneUnavailable) beginLanding();
     }
 
     function handleKeydown(event) {
@@ -494,6 +500,49 @@
         let warpElapsed = reducedMotion ? WARP_DURATION : 0;
         let arrivalElapsed = reducedMotion ? 2.2 : 0;
         let flightExtent = 13;
+        let landingSequence;
+        let landingElapsed = 0;
+        const projectedPlanet = new THREE.Vector3();
+        const cameraSpacePlanet = new THREE.Vector3();
+
+        function updatePlanetTarget() {
+            camera.updateMatrixWorld();
+            planetSystem.getWorldPosition(projectedPlanet);
+            cameraSpacePlanet.copy(projectedPlanet).applyMatrix4(camera.matrixWorldInverse);
+            projectedPlanet.project(camera);
+            const radius = planetSystem.scale.x * 3.5;
+            const depth = Math.max(radius + 0.1, -cameraSpacePlanet.z);
+            const diameter = window.innerHeight * camera.projectionMatrix.elements[5]
+                * radius / Math.sqrt(depth * depth - radius * radius);
+            overlay?.style.setProperty('--planet-x', `${(projectedPlanet.x * 0.5 + 0.5) * window.innerWidth}px`);
+            overlay?.style.setProperty('--planet-y', `${(-projectedPlanet.y * 0.5 + 0.5) * window.innerHeight}px`);
+            overlay?.style.setProperty('--planet-size', `${diameter}px`);
+        }
+
+        function updateLanding() {
+            const result = landingSequence.update(landingElapsed);
+            overlay?.style.setProperty('--atmosphere-opacity', String(result.veil));
+            if (result.complete) {
+                phase = 'landed';
+                animationSuspended = true;
+            }
+        }
+
+        beginLanding = () => {
+            if (phase !== 'arrival' || !active || !running) return;
+            reducedMotion = motionPreference.matches;
+            // The orbit pose is captured as it is when clicked, including during arrival.
+            landingSequence = createPlanetLanding({
+                renderer, orbitScene: scene, orbitCamera: camera, planetSystem,
+                compact: window.innerWidth < 700
+            });
+            phase = 'landing';
+            closeButton?.focus({ preventScroll: true });
+            landingElapsed = reducedMotion ? LANDING_DURATION : 0;
+            animationSuspended = reducedMotion;
+            updateLanding();
+            if (!reducedMotion) requestRender();
+        };
 
         function enterArrival(skipIntro = false) {
             if (phase === 'arrival') return;
@@ -545,6 +594,7 @@
             });
             backgroundStars.rotation.y += staticPose ? 0 : delta * 0.007;
             updateShips(arrivalElapsed, staticPose);
+            updatePlanetTarget();
         }
 
         function render(timestamp) {
@@ -567,11 +617,16 @@
                 camera.position.y = Math.cos(warpElapsed * 6.3) * 0.014 * streakMix;
                 camera.rotation.z = Math.sin(warpElapsed * 2.4) * 0.0025 * streakMix;
                 if (warpElapsed >= WARP_DURATION) enterArrival(false);
-            } else if (!animationSuspended) {
+            } else if (phase === 'landing') {
+                // Wall time preserves the 24-second flight at different frame rates.
+                // Visibility/resize restarts reset lastTimestamp so hidden time is excluded.
+                landingElapsed = Math.min(LANDING_DURATION, landingElapsed + rawDelta);
+                updateLanding();
+            } else if (phase === 'arrival' && !animationSuspended) {
                 updateArrival(delta, false);
             }
 
-            renderer.render(scene, camera);
+            if (phase !== 'landing' && phase !== 'landed') renderer.render(scene, camera);
             if (phase === 'warp' || !animationSuspended) frameRequest = window.requestAnimationFrame(render);
         }
 
@@ -593,13 +648,22 @@
             const height = Math.max(1, window.innerHeight);
             const compact = width < 700;
             camera.aspect = width / height;
-            camera.fov = compact ? 53 : 46;
+            // Preserve the captured planet and lens during a flight, including rotation.
+            if (!landingSequence) camera.fov = compact ? 53 : 46;
             camera.updateProjectionMatrix();
             renderer.setPixelRatio(Math.min(window.devicePixelRatio, 1.5));
             renderer.setSize(width, height, false);
-            planetSystem.position.set(compact ? 0 : -2.5, compact ? -0.75 : -0.2, -15.5);
-            planetSystem.scale.setScalar(compact ? 0.72 : 1);
+            if (!landingSequence) {
+                planetSystem.position.set(compact ? 0 : -2.5, compact ? -0.75 : -0.2, -15.5);
+                planetSystem.scale.setScalar(compact ? 0.72 : 1);
+            }
             flightExtent = compact ? 8.5 : 13;
+            if (landingSequence && !sceneUnavailable) {
+                landingSequence.resize(width, height);
+                updateLanding();
+                return;
+            }
+            if (phase === 'arrival') updatePlanetTarget();
             if (phase === 'arrival' && (animationSuspended || reducedMotion)) {
                 updateArrival(0, true);
                 renderer.render(scene, camera);
@@ -618,11 +682,16 @@
 
         function handleMotionPreference() {
             reducedMotion = motionPreference.matches;
-            animationSuspended = reducedMotion;
+            animationSuspended = reducedMotion || phase === 'landed';
             if (reducedMotion) {
-                enterArrival(true);
-                updateArrival(0, true);
-                renderer.render(scene, camera);
+                if (landingSequence && !sceneUnavailable) {
+                    landingElapsed = LANDING_DURATION;
+                    updateLanding();
+                } else {
+                    enterArrival(true);
+                    updateArrival(0, true);
+                    renderer.render(scene, camera);
+                }
                 if (frameRequest) window.cancelAnimationFrame(frameRequest);
                 frameRequest = undefined;
             } else {
@@ -634,6 +703,7 @@
             event.preventDefault();
             sceneUnavailable = true;
             phase = 'arrival';
+            overlay?.style.setProperty('--atmosphere-opacity', '0');
             running = false;
             if (frameRequest) window.cancelAnimationFrame(frameRequest);
             frameRequest = undefined;
@@ -661,6 +731,8 @@
             canvas.removeEventListener('webglcontextlost', handleContextLost);
             if (frameRequest) window.cancelAnimationFrame(frameRequest);
             pauseForExit = () => {};
+            beginLanding = () => {};
+            landingSequence?.dispose();
 
             const geometries = new Set();
             const materials = new Set();
@@ -689,9 +761,11 @@
 <div
     bind:this={overlay}
     class:mode-closing={!active}
-    class:arrival-phase={phase === 'arrival'}
+    class:arrival-phase={phase !== 'warp'}
+    class:landing-phase={phase === 'landing' || phase === 'landed'}
     class:scene-unavailable={sceneUnavailable}
     class="hyperdrive-experience"
+    data-phase={phase}
     role="dialog"
     aria-modal="true"
     aria-label="Hyperdrive destination experience"
@@ -711,9 +785,18 @@
     {/if}
 
     <div class="jump-flash" aria-hidden="true"></div>
+    <div class="atmosphere-veil" aria-hidden="true"></div>
     <div class="arrival-vignette" aria-hidden="true"></div>
 
     <div class="hyperdrive-ui">
+        {#if phase === 'arrival' && !sceneUnavailable}
+            <button
+                class="planet-target"
+                type="button"
+                aria-label="Land on the planet"
+                onclick={requestLanding}
+            ></button>
+        {/if}
         <div class="jump-header">
             <button
                 bind:this={closeButton}
@@ -730,7 +813,11 @@
         {#if phase === 'arrival'}
             <div class="arrival-copy" aria-live="polite">
                 <h2>Orbit reached</h2>
+                {#if sceneUnavailable}<p>The 3D landing view is unavailable on this device.</p>{/if}
             </div>
+        {/if}
+        {#if phase === 'landing' || phase === 'landed'}
+            <span class="landing-announcement" role="status">{phase === 'landed' ? 'Touchdown. Planet surface reached.' : 'Landing in progress.'}</span>
         {/if}
     </div>
 </div>
@@ -766,6 +853,7 @@
     }
 
     .jump-flash,
+    .atmosphere-veil,
     .arrival-vignette {
         position: absolute;
         z-index: 1;
@@ -788,6 +876,49 @@
 
     .arrival-phase .jump-flash {
         animation: arrival-flash 900ms ease-out both;
+    }
+
+    .landing-phase .jump-flash {
+        display: none;
+    }
+
+    .atmosphere-veil {
+        background: #bbd4d9;
+        opacity: var(--atmosphere-opacity, 0);
+    }
+
+    .landing-phase .arrival-vignette {
+        opacity: 0.26;
+        transition: opacity 2s ease;
+    }
+
+    .planet-target {
+        position: absolute;
+        top: var(--planet-y, 50%);
+        left: var(--planet-x, 50%);
+        width: var(--planet-size, 25vh);
+        height: var(--planet-size, 25vh);
+        padding: 0;
+        transform: translate(-50%, -50%);
+        border: 2px solid transparent;
+        border-radius: 50%;
+        background: transparent;
+        color: #eff8ff;
+        cursor: pointer;
+        pointer-events: auto;
+        -webkit-tap-highlight-color: transparent;
+    }
+
+    .planet-target:focus-visible { outline: 3px solid #e0f5ff; outline-offset: 8px; }
+    .return-button:focus-visible { outline: 3px solid #81d9ef; outline-offset: 5px; }
+
+    .landing-announcement {
+        position: absolute;
+        width: 1px;
+        height: 1px;
+        overflow: hidden;
+        clip-path: inset(50%);
+        white-space: nowrap;
     }
 
     .arrival-vignette {
@@ -864,6 +995,13 @@
         line-height: 0.9;
         text-shadow: 5px 6px 0 rgba(13, 55, 90, 0.82);
         text-transform: uppercase;
+    }
+
+    .arrival-copy p {
+        max-width: 26rem;
+        margin: 1rem 0 0;
+        color: #d6e9f4;
+        font-size: 1rem;
     }
 
     .fallback-system {
@@ -949,6 +1087,7 @@
         .jump-flash,
         .arrival-phase .jump-flash,
         .arrival-copy { animation: none; }
-        .return-button { transition: none; }
+        .return-button,
+        .landing-phase .arrival-vignette { transition: none; }
     }
 </style>
